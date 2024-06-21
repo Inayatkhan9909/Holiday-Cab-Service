@@ -1,7 +1,6 @@
 import cookie from 'cookie';
 import { NextResponse } from 'next/server'
 
-
 export function middleware(request) {
   const path = request.nextUrl.pathname;
   const cookies = cookie.parse(request.headers.get('cookie') || '');
