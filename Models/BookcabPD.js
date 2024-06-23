@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const CabsFair =  mongoose.models.CabsFair ||
+const BookcabPD =  mongoose.models.BookcabPD ||
 
-mongoose.model("CabsFair", {
+mongoose.model("BookcabPD", {
 
     pickup: String,
     drop: String,
@@ -16,4 +16,4 @@ mongoose.model("CabsFair", {
 
 });
 
-export default CabsFair
+export default BookcabPD

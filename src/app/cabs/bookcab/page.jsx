@@ -3,9 +3,20 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Box, TextField, Button, FormControl, InputLabel, MenuItem, Select, FormHelperText } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@mui/material';
+import ConfirmBooking from '@/app/components/ConfirmBooking';
+import Contact from '@/app/components/Contact';
 
 const BookCab = () => {
     const router = useRouter();
+    const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
+    const [contactDialoge, setcontactDialoge] = useState(false);
     const [searchParams, setSearchParams] = useState({ pickup: '', drop: '', tripType: '' });
     const [formData, setFormData] = useState({
         cabType: '',
@@ -28,8 +39,8 @@ const BookCab = () => {
         const tripType = params.get('tripType') || '';
 
         setSearchParams({ pickup, drop, tripType });
+        setFormData((prevData) => ({ ...prevData, pickup, drop, tripType }));
 
-        // Fetch the price from the database
         const fetchPrice = async () => {
             try {
                 const response = await fetch(`/api/cabfare?pickup=${pickup}&drop=${drop}`);
@@ -49,11 +60,13 @@ const BookCab = () => {
         setSearchParams((prevParams) => ({ ...prevParams, [name]: value }));
     };
 
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = {};
         Object.keys(formData).forEach((key) => {
-            if (!formData[key]) {
+            if (!formData[key] && key !== 'price') {
                 newErrors[key] = 'This field is required';
             }
         });
@@ -61,180 +74,211 @@ const BookCab = () => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            // Handle form submission, such as saving booking details to the database
             console.log('Form Data:', formData);
             setErrors({});
+            setconfirmbookDialoge(true);
         }
+
     };
+  
+    const handleContact = () =>{
+        setcontactDialoge(true);
+    }
 
     return (
         <>
-            <Container maxWidth="100vw">
-                {/* <LocationComponent/> */}
-                <Box component="form" onSubmit={handleSubmit} sx={{ width: { xs: "100%", sm: "80%" }, p: { xs: 2, sm: 4 }, margin: '5vh auto', border: '1px solid black' }}>
-                    <Box gutterBottom sx={{ fontSize: { sm: "25px", xs: "22px" }, width: { sm: "50%", xs: "100%" }, m: 'auto', display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                        <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
-
-                            <FormControl sx={{ m: 1, minWidth: { md: 180, sm: 130, xs: 100 } }} error={Boolean(errors.pickup)}>
-                                <InputLabel id="pickup_select">Pickup</InputLabel>
-                                <Select
-                                    labelId="pickup_select"
-                                    id="pickup"
-                                    value={searchParams.pickup}
-                                    name="pickup"
-                                    label="Pickup"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="Srinagar">Srinagar</MenuItem>
-                                    <MenuItem value="Jammu">Jammu</MenuItem>
-                                    <MenuItem value="Pahlagam">Pahlagam</MenuItem>
-                                    <MenuItem value="Gulmarg">Gulmarg</MenuItem>
-                                    <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-                                    <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-                                    <MenuItem value="Kargil">Kargil</MenuItem>
-                                </Select>
-                                {errors.pickup && <FormHelperText>{errors.pickup}</FormHelperText>}
-                            </FormControl>
-
-                            <FormControl sx={{ m: 1, minWidth: { md: 180, sm: 130, xs: 100 } }} error={Boolean(errors.drop)}>
-                                <InputLabel id="drop_select">Drop</InputLabel>
-                                <Select
-                                    labelId="drop_select"
-                                    id="drop"
-                                    value={searchParams.drop}
-                                    label="Drop"
-                                    name="drop"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="Srinagar">Srinagar</MenuItem>
-                                    <MenuItem value="Jammu">Jammu</MenuItem>
-                                    <MenuItem value="Pahlagam">Pahlagam</MenuItem>
-                                    <MenuItem value="Gulmarg">Gulmarg</MenuItem>
-                                    <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-                                    <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-                                    <MenuItem value="Kargil">Kargil</MenuItem>
-                                </Select>
-                                {errors.drop && <FormHelperText>{errors.drop}</FormHelperText>}
-                            </FormControl>
-                        </Box>
-                        <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
-
-                            <FormControl sx={{ m: 1, minWidth: { md: 180, sm: 130, xs: 100 } }} error={Boolean(errors.tripType)}>
-                                <InputLabel id="trip_type_select">Trip type</InputLabel>
-                                <Select
-                                    labelId="trip_type_select"
-                                    id="trip_type"
-                                    value={searchParams.tripType}
-                                    name="tripType"
-                                    label="Trip type"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="One way">One way</MenuItem>
-                                    <MenuItem value="Round trip">Round trip</MenuItem>
-                                </Select>
-                                {errors.tripType && <FormHelperText>{errors.tripType}</FormHelperText>}
-                            </FormControl>
-                        </Box>
-                        {searchParams.tripType === 'Round trip' && (
-                            <Typography variant="body1" color="textSecondary">
-                                Note: This round trip will include popular tourist points at the destination.
-                            </Typography>
-                        )}
-                    </Box>
-
-                    <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 2 }}>
-                        <FormControl sx={{ m: 1, minWidth: "15%" }} error={Boolean(errors.cabType)}>
-                            <InputLabel id="cabType-label">Cab Type</InputLabel>
-                            <Select
-                                labelId="cabType-label"
+            <div className="container mx-auto px-4">
+                <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 my-10 bg-white rounded-lg shadow-md border border-black">
+                    <div className="mb-6 text-center">
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-2">Book a Cab</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="form-control">
+                            <label htmlFor="pickup" className="block text-sm font-medium text-gray-700">Pickup</label>
+                            <select
+                                id="pickup"
+                                name="pickup"
+                                value={formData.pickup}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1 border-gray-300
+                                                    shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            >
+                                <option value="">Select Pickup Location</option>
+                                <option value="Srinagar">Srinagar</option>
+                                <option value="Jammu">Jammu</option>
+                                <option value="Pahlagam">Pahlagam</option>
+                                <option value="Gulmarg">Gulmarg</option>
+                                <option value="Sonamarg">Sonamarg</option>
+                                <option value="Doodhpathri">Doodhpathri</option>
+                                <option value="Kargil">Kargil</option>
+                            </select>
+                            {errors.pickup && <p className="mt-2 text-sm text-red-600">{errors.pickup}</p>}
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="drop" className="block text-sm font-medium text-gray-700">Drop</label>
+                            <select
+                                id="drop"
+                                name="drop"
+                                value={formData.drop}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            >
+                                <option value="">Select Drop Location</option>
+                                <option value="Srinagar">Srinagar</option>
+                                <option value="Jammu">Jammu</option>
+                                <option value="Pahlagam">Pahlagam</option>
+                                <option value="Gulmarg">Gulmarg</option>
+                                <option value="Sonamarg">Sonamarg</option>
+                                <option value="Doodhpathri">Doodhpathri</option>
+                                <option value="Kargil">Kargil</option>
+                            </select>
+                            {errors.drop && <p className="mt-2 text-sm text-red-600">{errors.drop}</p>}
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="tripType" className="block text-sm font-medium text-gray-700">Trip Type</label>
+                            <select
+                                id="tripType"
+                                name="tripType"
+                                value={formData.tripType}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1  border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            >
+                                <option value="">Select Trip Type</option>
+                                <option value="One way">One way</option>
+                                <option value="Round trip">Round trip</option>
+                            </select>
+                            {errors.tripType && <p className="mt-2 text-sm text-red-600">{errors.tripType}</p>}
+                        </div>
+                    </div>
+                    {searchParams.tripType === 'Round trip' && (
+                        <div className="mb-6 text-center">
+                            <p className="text-gray-600">Note: This round trip will include popular tourist points at the destination.</p>
+                        </div>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="form-control">
+                            <label htmlFor="cabType" className="block text-sm font-medium text-gray-700">Cab Type</label>
+                            <select
                                 id="cabType"
                                 name="cabType"
                                 value={formData.cabType}
                                 onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1  border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             >
-                                <MenuItem value="Swift dzire">Swift dzire</MenuItem>
-                                <MenuItem value="Honda Amaze">Honda Amaze</MenuItem>
-                                <MenuItem value="Crysta">Crysta</MenuItem>
-                                <MenuItem value="Innova">Innova</MenuItem>
-                                <MenuItem value="Traveler">Traveler</MenuItem>
-                            </Select>
-                            {errors.cabType && <FormHelperText>{errors.cabType}</FormHelperText>}
-                        </FormControl>
-
-                        <FormControl sx={{ m: 1, minWidth: "10%" }} error={Boolean(errors.persons)}>
-                            <InputLabel id="persons-label">Persons</InputLabel>
-                            <Select
-                                labelId="persons-label"
+                                <option value="">Select Cab Type</option>
+                                <option value="Swift dzire">Swift dzire</option>
+                                <option value="Honda Amaze">Honda Amaze</option>
+                                <option value="Crysta">Crysta</option>
+                                <option value="Innova">Innova</option>
+                                <option value="Traveler">Traveler</option>
+                            </select>
+                            {errors.cabType && <p className="mt-2 text-sm text-red-600">{errors.cabType}</p>}
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="persons" className="block text-sm font-medium text-gray-700">Persons</label>
+                            <select
                                 id="persons"
                                 name="persons"
                                 value={formData.persons}
                                 onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1  border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             >
+                                <option value="">Select Number of Persons</option>
                                 {Array.from({ length: 15 }, (_, i) => (
-                                    <MenuItem key={i + 1} value={i + 1}>{i + 1}</MenuItem>
+                                    <option key={i + 1} value={i + 1}>{i + 1}</option>
                                 ))}
-                            </Select>
-                            {errors.persons && <FormHelperText>{errors.persons}</FormHelperText>}
-                        </FormControl>
+                            </select>
+                            {errors.persons && <p className="mt-2 text-sm text-red-600">{errors.persons}</p>}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="form-control">
+                            <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile Number</label>
+                            <input
+                                id="mobile"
+                                name="mobile"
+                                type="text"
+                                value={formData.mobile}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1  border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                            {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile}</p>}
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
+                            <input
+                                id="date"
+                                name="date"
+                                type="date"
+                                value={formData.date}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                            {errors.date && <p className="mt-2 text-sm text-red-600">{errors.date}</p>}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="form-control">
+                            <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
+                            <input
+                                id="time"
+                                name="time"
+                                type="time"
+                                value={formData.time}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                            {errors.time && <p className="mt-2 text-sm text-red-600">{errors.time}</p>}
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="fullAddress" className="block text-sm font-medium text-gray-700">Full Address</label>
+                            <input
+                                id="fullAddress"
+                                name="fullAddress"
+                                type="text"
+                                value={formData.fullAddress}
+                                onChange={handleChange}
+                                className="mt-1 block w-3/5 rounded-md border-2  p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            />
+                            {errors.fullAddress && <p className="mt-2 text-sm text-red-600">{errors.fullAddress}</p>}
+                        </div>
+                    </div>
+                    <div className="mb-6 text-center">
+                        <p className="text-xl font-semibold">Price: Rs {formData.price}</p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <button type="submit" className="px-6 py-3 mb-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Book Cab</button>
+                        <button onClick={handleContact} className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700">Contact Us</button>
+                    </div>
+                </form>
 
-                        <TextField
-                            label="Mobile Number"
-                            type="text"
-                            name="mobile"
-                            value={formData.mobile}
-                            onChange={handleChange}
-                            sx={{ m: 1, minWidth: "20%" }}
-                            error={Boolean(errors.mobile)}
-                            helperText={errors.mobile}
-                        />
+                <Dialog open={confirmbookDialoge} onClose={() => setconfirmbookDialoge(false)}>
+                    <DialogTitle>Confirm Booking</DialogTitle>
+                    <DialogContent>
+                        <ConfirmBooking formData={formData} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setconfirmbookDialoge(false)} color="primary">
+                            Cancel
+                        </Button>
+                       
+                    </DialogActions>
+                </Dialog>
 
-                        <TextField
-                            label="Date"
-                            type="date"
-                            name="date"
-                            value={formData.date}
-                            onChange={handleChange}
-                            sx={{ m: 1, minWidth: "20%" }}
-                            InputLabelProps={{ shrink: true }}
-                            error={Boolean(errors.date)}
-                            helperText={errors.date}
-                        />
+                <Dialog open={contactDialoge} onClose={() => setcontactDialoge(false)}>
+                    <DialogTitle>Confirm Booking</DialogTitle>
+                    <DialogContent>
+                       <Contact/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setcontactDialoge(false)} color="primary">
+                            Cancel
+                        </Button>
+                       
+                    </DialogActions>
+                </Dialog>
 
-                        <TextField
-                            label="Time"
-                            type="time"
-                            name="time"
-                            value={formData.time}
-                            onChange={handleChange}
-                            sx={{ m: 1, minWidth: "20%" }}
-                            InputLabelProps={{ shrink: true }}
-                            error={Boolean(errors.time)}
-                            helperText={errors.time}
-                        />
-
-                        <TextField
-                            label="Full Address"
-                            type="text"
-                            name="fullAddress"
-                            value={formData.fullAddress}
-                            onChange={handleChange}
-                            sx={{ m: 1, minWidth: "40%" }}
-                            error={Boolean(errors.fullAddress)}
-                            helperText={errors.fullAddress}
-                        />
-
-                        <Typography variant='h5' sx={{ m: 4 }}>
-                            Price : Rs {formData.price}
-                        </Typography>
-
-                    </Box>
-
-                    <Box sx={{ width: { sm: "50%", xs: "100%" }, m: 'auto', display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
-                        <Button type="submit" variant="contained" sx={{ m: 2, p: 1, px: { sm: 4, xs: 2 } }}>Book Cab</Button>
-                        <Button variant="contained" sx={{ m: 2, p: 1, px: { sm: 4, xs: 2 } }}>Contact us</Button>
-                    </Box>
-                </Box>
-            </Container>
+            </div>
         </>
     );
 };

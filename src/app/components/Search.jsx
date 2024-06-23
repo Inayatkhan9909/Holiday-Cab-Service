@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { useRouter } from 'next/navigation';
 import FormHelperText from '@mui/material/FormHelperText';
+import Grid from '@mui/material/Grid';
 
 const Search = () => {
   const [pickup, setPickup] = useState('');
@@ -60,81 +61,79 @@ const Search = () => {
         border: '1px solid black'
       }}
     >
-      <Box
-        sx={{
-          '& > :not(style)': { m: 1, width: { md: '100%', sm: '100%', xs: '100%' } },
-          display: { sm: 'flex', xs: 'block' }
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <FormControl sx={{ m: 1, minWidth: { md: 200, sm: 150, sx: 120 } }} error={pickupError}>
-          <InputLabel id="pickup_select">Pickup</InputLabel>
-          <Select
-            labelId="pickup_select"
-            id="pickup"
-            value={pickup}
-            label="Pickup"
-            onChange={(e) => setPickup(e.target.value)}
-          >
-            <MenuItem value="Srinagar">Srinagar</MenuItem>
-            <MenuItem value="Jammu">Jammu</MenuItem>
-            <MenuItem value="Pahlagam">Pahlagam</MenuItem>
-            <MenuItem value="Gulmarg">Gulmarg</MenuItem>
-            <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-            <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-            <MenuItem value="Kargil">Kargil</MenuItem>
-          </Select>
-          {pickupError && <FormHelperText>Pickup location is required.</FormHelperText>}
-        </FormControl>
-
-        <FormControl sx={{ m: 1, minWidth: { md: 200, sm: 150, sx: 120 } }} error={dropError}>
-          <InputLabel id="drop_select">Drop</InputLabel>
-          <Select
-            labelId="drop_select"
-            id="drop"
-            value={drop}
-            label="Drop"
-            onChange={(e) => setDrop(e.target.value)}
-          >
-            <MenuItem value="Srinagar">Srinagar</MenuItem>
-            <MenuItem value="Jammu">Jammu</MenuItem>
-            <MenuItem value="Pahlagam">Pahlagam</MenuItem>
-            <MenuItem value="Gulmarg">Gulmarg</MenuItem>
-            <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-            <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-            <MenuItem value="Kargil">Kargil</MenuItem>
-          </Select>
-          {dropError && <FormHelperText>Drop location is required.</FormHelperText>}
-        </FormControl>
-
-        <FormControl sx={{ m: 1, minWidth: { md: 200, sm: 150, sx: 120 } }} error={tripTypeError}>
-          <InputLabel id="trip_type_select">Type</InputLabel>
-          <Select
-            labelId="trip_type_select"
-            id="trip_type"
-            value={tripType}
-            label="Type"
-            onChange={(e) => setTripType(e.target.value)}
-          >
-            <MenuItem value="One way">One way</MenuItem>
-            <MenuItem value="Round trip">Round trip</MenuItem>
-          </Select>
-          {tripTypeError && <FormHelperText>Trip type is required.</FormHelperText>}
-        </FormControl>
+      <Grid container spacing={1} sx={{width:{sm:'60%',sx:'100%'}, justifyContent: 'center', alignItems: 'center' }}>
+        <Grid item  sm={5} lg={4} xs={5}>
+          <FormControl fullWidth  error={pickupError}>
+            <InputLabel id="pickup_select">Pickup</InputLabel>
+            <Select
+              labelId="pickup_select"
+              id="pickup"
+              value={pickup}
+              label="Pickup"
+              onChange={(e) => setPickup(e.target.value)}
+            >
+              <MenuItem value="Srinagar">Srinagar</MenuItem>
+              <MenuItem value="Jammu">Jammu</MenuItem>
+              <MenuItem value="Pahlagam">Pahlagam</MenuItem>
+              <MenuItem value="Gulmarg">Gulmarg</MenuItem>
+              <MenuItem value="Sonamarg">Sonamarg</MenuItem>
+              <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem>
+            </Select>
+            {pickupError && <FormHelperText>Pickup location is required.</FormHelperText>}
+          </FormControl>
+        </Grid>
+        <Grid item sm={5} lg={4} xs={6}>
+          <FormControl fullWidth error={dropError}>
+            <InputLabel id="drop_select">Drop</InputLabel>
+            <Select
+              labelId="drop_select"
+              id="drop"
+              value={drop}
+              label="Drop"
+              onChange={(e) => setDrop(e.target.value)}
+            >
+              <MenuItem value="Srinagar">Srinagar</MenuItem>
+              <MenuItem value="Jammu">Jammu</MenuItem>
+              <MenuItem value="Pahlagam">Pahlagam</MenuItem>
+              <MenuItem value="Gulmarg">Gulmarg</MenuItem>
+              <MenuItem value="Sonamarg">Sonamarg</MenuItem>
+              <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem>
+            </Select>
+            {dropError && <FormHelperText>Drop location is required.</FormHelperText>}
+          </FormControl>
+        </Grid>
+        <Grid item sm={5} lg={4} xs={5}>
+          <FormControl fullWidth error={tripTypeError}>
+            <InputLabel id="trip_type_select">Type</InputLabel>
+            <Select
+              labelId="trip_type_select"
+              id="trip_type"
+              value={tripType}
+              label="Type"
+              onChange={(e) => setTripType(e.target.value)}
+            >
+              <MenuItem value="One way">One way</MenuItem>
+              <MenuItem value="Round trip">Round trip</MenuItem>
+            </Select>
+            {tripTypeError && <FormHelperText>Trip type is required.</FormHelperText>}
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Box sx={{ mt: 2, width: { xs: '40%', sm: 'auto' } }}>
+        <Button
+          type="submit"
+          variant="contained"
+          size="small"
+          sx={{
+            width: '100%',
+            py: 2
+          }}
+        >
+          Search
+        </Button>
       </Box>
-      <Button
-        type="submit"
-        variant="contained"
-        size="small"
-        sx={{
-          width: { xs: '40%', sm: '25ch' },
-          mt: 2,
-          py: 2
-        }}
-      >
-        Search
-      </Button>
     </Typography>
   );
 };
