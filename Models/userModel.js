@@ -8,6 +8,8 @@ mongoose.model("User", {
   phone:Number,
   email: String,
   password: String,
+  verified:Boolean,
+  otp:String
 });
 
 export default User

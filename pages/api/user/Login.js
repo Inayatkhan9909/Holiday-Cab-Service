@@ -8,7 +8,7 @@ require("dotenv").config();
 const secretkey = process.env.SECRET_KEY;
 
 const LoginHandler = async (req,res) => {
-    console.log(req)
+   
     //    const url = req.netxUrl.pathname;
        
     if (req.method !== "POST") {

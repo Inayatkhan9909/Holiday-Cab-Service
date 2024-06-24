@@ -16,14 +16,22 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@mui/material';
+import Contact from './Contact';
 
 const pages = ['Packages', 'Pick/Drop', 'Pricing', 'Contact'];
-const settings = ['Profile', 'Bookings', 'Logout'];
+const settings = ['Profile', 'Bookings','Signup', 'Logout'];
 
 function ResponsiveAppBar() {
     const router = useRouter();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [openContactDialoge, setopenContactDialoge] = React.useState(false);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -59,6 +67,10 @@ function ResponsiveAppBar() {
             console.log(error);
             toast.error("Something went wrong");
         }
+    }
+
+    const handleContact = () => {
+        setopenContactDialoge(true);
     }
 
     return (
@@ -156,14 +168,20 @@ function ResponsiveAppBar() {
                     </Link>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Link href={`/${page.toLowerCase()}`} passHref key={page}>
-                                <Button
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block', margin: '5px' }}
-                                >
-                                    {page}
-                                </Button>
-                            </Link>
+
+                            <Button
+                            key={page}
+                                onClick={() => {
+                                    handleCloseNavMenu();
+                                    if (page === 'Contact') {
+                                        handleContact();
+                                    }
+                                }}
+                                sx={{ my: 2, color: 'white', display: 'block', margin: '5px' }}
+                            >
+                                {page}
+                            </Button>
+
                         ))}
                     </Box>
 
@@ -204,6 +222,17 @@ function ResponsiveAppBar() {
                         </Menu>
                     </Box>
                 </Toolbar>
+                <Dialog open={openContactDialoge} onClose={() => setopenContactDialoge(false)}>
+                    <DialogTitle>Confirm Booking</DialogTitle>
+                    <DialogContent>
+                        <Contact />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setopenContactDialoge(false)} color="primary">
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Container>
         </AppBar>
     );

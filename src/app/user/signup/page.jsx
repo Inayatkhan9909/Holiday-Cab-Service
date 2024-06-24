@@ -16,7 +16,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { toast, ToastContainer } from "react-toastify";
 import CircularProgress from '@mui/material/CircularProgress';
-
+import {  Dialog,DialogContent, } from '@mui/material';
+import LoadingComponent from '@/app/components/LoadingComponent';
 const defaultTheme = createTheme();
 
 export default function SignUp() {
@@ -27,13 +28,14 @@ export default function SignUp() {
   const [phone,setphone] = useState("");
   const [password, setPassword] = useState("");
   const [loading,setloading] = useState(false);
-
+  const [loadDialog, setloadDialog] = useState(false);
 
 
   const handleSubmit = async (event) => {
     
       try {
         setloading(true)
+        setloadDialog(true);
         event.preventDefault();
         const response = await fetch("/api/user/Signup",{
           method:"POST",
@@ -53,13 +55,15 @@ export default function SignUp() {
 
         if (data.message === "User Created Succesfully") {
            toast.success("User Created Succesfully");
+           
           setFirstname("")
           setEmail("")
           setphone("")
           setLastname("")
           setPassword("")
-            router.push("/user/login");
+           router.push(`/user/verifyuser?email=${email}`);
         } else {
+        
            toast.error(data.message);
         }
 
@@ -70,6 +74,7 @@ export default function SignUp() {
       }
       finally
       {
+        setloadDialog(false)
         setloading(false);
       }
   };
@@ -206,7 +211,19 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
+        <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+                style={{ backgroundColor: 'transparent' }}
+                overlayStyle={{ backgroundColor: 'transparent' }}
+                title='Loading'
+                titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
+            >
+
+                <DialogContent>
+                    <LoadingComponent />
+
+                </DialogContent>
+
+            </Dialog>
       </Container>
     </ThemeProvider>
     </>
