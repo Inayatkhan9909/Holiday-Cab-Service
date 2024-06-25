@@ -15,6 +15,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { toast, ToastContainer } from "react-toastify";
 import CircularProgress from '@mui/material/CircularProgress';
+import { Dialog, DialogContent, } from '@mui/material';
+import LoadingComponent from '@/app/components/LoadingComponent';
 
 
 
@@ -24,12 +26,13 @@ export default function Login() {
  
   const router = useRouter();
   const [loading,setloading] = React.useState(false);
-        
+  const [loadDialog, setloadDialog] = React.useState(false);  
     const handleSubmit = async (event) => {
       setloading(true);
       try {
  
         event.preventDefault();
+        setloadDialog(true);
         const formData = new FormData(event.currentTarget);
   
         const email = formData.get('email');
@@ -63,6 +66,7 @@ export default function Login() {
     }
     finally
     {
+      setloadDialog(false);
       setloading(false);
     }
 
@@ -144,6 +148,18 @@ export default function Login() {
               </Grid>
             </Box>
           </Box>
+          <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+                style={{ backgroundColor: 'transparent' }}
+                overlayStyle={{ backgroundColor: 'transparent' }}
+                title='Loading'
+                titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
+            >
+
+                <DialogContent>
+                    <LoadingComponent/>
+                </DialogContent>
+
+            </Dialog>
          
         </Container>
       </ThemeProvider>
