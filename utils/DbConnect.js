@@ -9,7 +9,7 @@ if(mongoose.connections[0].readyState)  {
     }
     try {
         await mongoose.connect(url);
-        console.log("Database Connected")
+        console.log("Database Connected"+url)
     } catch (error) {
         console.error(error);
     }
