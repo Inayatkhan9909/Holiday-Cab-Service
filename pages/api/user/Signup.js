@@ -19,6 +19,11 @@ const SignupHandler = async (req, res) => {
             return errorHandler(res, 400, "All Credentials Required!");
         }
 
+        if (phone.length !== 10) {
+            toast.error("Phone number must be 10 digits");
+            return;
+          }
+
         await ConnectDb();
         const Alreadyexists = await User.findOne({ email });
         if (Alreadyexists) {

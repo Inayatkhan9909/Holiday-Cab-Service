@@ -23,15 +23,17 @@ import {
     DialogTitle,
 } from '@mui/material';
 import Contact from './Contact';
+import PricingComponent from './PricingComponent';
 
 const pages = ['Packages', 'Pick/Drop', 'Pricing', 'Contact'];
-const settings = ['Profile', 'Bookings','Signup', 'Logout'];
+const settings = ['Profile', 'Bookings', 'Signup', 'Logout'];
 
 function ResponsiveAppBar() {
     const router = useRouter();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [openContactDialoge, setopenContactDialoge] = React.useState(false);
+    const [openPricingDialoge, setopenPricingDialoge] = React.useState(false);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -71,6 +73,9 @@ function ResponsiveAppBar() {
 
     const handleContact = () => {
         setopenContactDialoge(true);
+    }
+    const handlePricing = () => {
+        setopenPricingDialoge(true);
     }
 
     return (
@@ -138,10 +143,20 @@ function ResponsiveAppBar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Link href={`/${page.toLowerCase()}`} passHref>
-                                        <Typography textAlign="center">{page}</Typography>
-                                    </Link>
+                                <MenuItem key={page}
+                                    onClick={() => {
+                                        handleCloseNavMenu();
+                                        if (page === 'Contact') {
+                                            handleContact();
+                                        }
+                                        if (page === 'Pricing') {
+                                            handlePricing();
+                                        }
+                                    }}
+                                >
+
+                                    <Typography textAlign="center">{page}</Typography>
+
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -170,11 +185,14 @@ function ResponsiveAppBar() {
                         {pages.map((page) => (
 
                             <Button
-                            key={page}
+                                key={page}
                                 onClick={() => {
                                     handleCloseNavMenu();
                                     if (page === 'Contact') {
                                         handleContact();
+                                    }
+                                    if (page === 'Pricing') {
+                                        handlePricing();
                                     }
                                 }}
                                 sx={{ my: 2, color: 'white', display: 'block', margin: '5px' }}
@@ -229,6 +247,17 @@ function ResponsiveAppBar() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setopenContactDialoge(false)} color="primary">
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={openPricingDialoge} onClose={() => setopenPricingDialoge(false)}>
+                    
+                    <DialogContent>
+                       <PricingComponent/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setopenPricingDialoge(false)} color="primary">
                             Cancel
                         </Button>
                     </DialogActions>

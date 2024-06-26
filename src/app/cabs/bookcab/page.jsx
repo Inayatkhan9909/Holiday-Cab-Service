@@ -11,7 +11,7 @@ const BookCab = () => {
     const router = useRouter();
     const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
     const [contactDialoge, setcontactDialoge] = useState(false);
-    const [searchParams, setSearchParams] = useState({ pickup: '', drop: '', tripType: '' });
+    const [searchParams, setSearchParams] = useState({ pickup: '', drop: '', triptype: '' });
     const [formData, setFormData] = useState({
         cabType: '',
         persons: '',
@@ -22,7 +22,7 @@ const BookCab = () => {
         price: '',
         pickup: '',
         drop: '',
-        tripType: ''
+        triptype: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -30,19 +30,19 @@ const BookCab = () => {
         const params = new URLSearchParams(window.location.search);
         const pickup = params.get('pickup') || '';
         const drop = params.get('drop') || '';
-        const tripType = params.get('tripType') || '';
+        const triptype = params.get('triptype') || '';
 
-        setSearchParams({ pickup, drop, tripType });
-        setFormData((prevData) => ({ ...prevData, pickup, drop, tripType }));
+        setSearchParams({ pickup, drop, triptype });
+        setFormData((prevData) => ({ ...prevData, pickup, drop, triptype }));
 
-        fetchPrice(pickup, drop, formData.cabType);
+        fetchPrice(pickup, drop, formData.cabType,triptype);
     }, []);
 
     useEffect(() => {
-        fetchPrice(formData.pickup, formData.drop, formData.cabType, formData.tripType);
-    }, [formData.pickup, formData.drop, formData.cabType]);
+        fetchPrice(formData.pickup, formData.drop, formData.cabType, formData.triptype);
+    }, [formData.pickup, formData.drop, formData.cabType,formData.triptype]);
 
-    const fetchPrice = async (pickup, drop, cabType,tripType) => {
+    const fetchPrice = async (pickup, drop, cabType,triptype) => {
         try {
             const response = await fetch(`/api/admin/Getpickdropfare`);
             const data = await response.json();
@@ -55,11 +55,11 @@ const BookCab = () => {
             console.log(priceObj);
             console.log(data)
             let newprice = 0;
-            if(priceObj && tripType === "Oneway")
+            if(priceObj && triptype === "Oneway")
                 {
                     newprice = priceObj.onewayfair;
                }
-                if(priceObj &&  tripType === "Roundtrip")
+                if(priceObj &&  triptype === "Roundtrip")
                     {
                         newprice = priceObj.roundtripfair;
                     }
@@ -187,11 +187,11 @@ const BookCab = () => {
                                 {errors.drop && <p className="mt-2 text-sm text-red-600">{errors.drop}</p>}
                             </div>
                             <div className="form-control">
-                                <label htmlFor="tripType" className="block text-sm font-medium text-gray-700">Trip Type</label>
+                                <label htmlFor="triptype" className="block text-sm font-medium text-gray-700">Trip Type</label>
                                 <select
-                                    id="tripType"
-                                    name="tripType"
-                                    value={formData.tripType}
+                                    id="triptype"
+                                    name="triptype"
+                                    value={formData.triptype}
                                     onChange={handleChange}
                                     className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
@@ -199,10 +199,10 @@ const BookCab = () => {
                                     <option value="Oneway">One way</option>
                                     <option value="Roundtrip">Round trip</option>
                                 </select>
-                                {errors.tripType && <p className="mt-2 text-sm text-red-600">{errors.tripType}</p>}
+                                {errors.triptype && <p className="mt-2 text-sm text-red-600">{errors.triptype}</p>}
                             </div>
                         </div>
-                        {searchParams.tripType === 'Round trip' && (
+                        {searchParams.triptype === 'Round trip' && (
                             <div className="mb-6 text-center">
                                 <p className="text-gray-600">Note: This round trip will include popular tourist points at the destination.</p>
                             </div>

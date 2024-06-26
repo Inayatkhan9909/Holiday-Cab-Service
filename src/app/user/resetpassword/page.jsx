@@ -4,11 +4,17 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { Dialog, DialogContent, } from '@mui/material';
+import LoadingComponent from '@/app/components/LoadingComponent';
+
+
+
 
 const ResetPassword = () => {
   const router = useRouter();
   const [forgotpasswordToken, setForgotpasswordToken] = useState("");
   const [email, setEmail] = useState("");
+  const [loadDialog, setloadDialog] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -17,7 +23,7 @@ const ResetPassword = () => {
       setEmail(decodeURIComponent(params.get('email')));
     }
   }, []);
-  
+
   console.log(forgotpasswordToken)
   console.log(email)
 
@@ -45,6 +51,7 @@ const ResetPassword = () => {
     } else {
       setErrors({});
       try {
+        setloadDialog(ture)
         const response = await fetch('/api/user/Resetpassword', {
           method: 'POST',
           headers: {
@@ -62,6 +69,9 @@ const ResetPassword = () => {
         }
       } catch (error) {
         setErrors({ server: 'An error occurred. Please try again.' });
+      }
+      finally {
+        setloadDialog(false);
       }
     }
   };
@@ -106,6 +116,19 @@ const ResetPassword = () => {
           Reset Password
         </Button>
       </form>
+
+      <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+        style={{ backgroundColor: 'transparent' }}
+        overlayStyle={{ backgroundColor: 'transparent' }}
+        title='Loading'
+        titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
+      >
+
+        <DialogContent>
+          <LoadingComponent />
+        </DialogContent>
+
+      </Dialog>
     </Box>
   );
 };

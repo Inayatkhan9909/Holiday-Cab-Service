@@ -12,7 +12,9 @@ mongoose.model("BookcabPD", {
     traveldate:Date,
     traveltime: String,
     onewayfair:Number,
-    roundtripfair:Number
+    roundtripfair:Number,
+    triptype:String,
+    
 
 });
 

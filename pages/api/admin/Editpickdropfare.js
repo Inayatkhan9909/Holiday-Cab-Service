@@ -8,15 +8,16 @@ const EditTrip = async (req, res) => {
   }
 
   try {
-    const {  ridecode, pickup, drop,  onewayfair, roundtripfair, cabtype } = req.body;
+    const { _id, ridecode, pickup, drop,  onewayfair, roundtripfair, cabtype } = req.body;
       console.log(req.body);
-    if ( !ridecode || !pickup || !drop  || !onewayfair || !roundtripfair || !cabtype) {
+    if (!_id || !ridecode || !pickup || !drop  || !onewayfair || !roundtripfair || !cabtype) {
         
       return errorHandler(res, 400, "All fields are required");
     }
+    ridecode
 
     await ConnectDb();
-    const trip = await PickDrop.findOneAndUpdate({ridecode},{
+    const trip = await PickDrop.findOneAndUpdate({_id},{
         ridecode : ridecode,
         pickup : pickup,
         drop : drop,
@@ -24,13 +25,10 @@ const EditTrip = async (req, res) => {
         roundtripfair : roundtripfair,
         cabtype : cabtype
     });
-         console.log(trip)
+         console.log("trip"+trip)
     if (!trip) {
       return errorHandler(res, 404, "Trip not found");
     }
-
-
-    
 
     res.status(200).json({ message: "Trip updated successfully" });
   } catch (error) {

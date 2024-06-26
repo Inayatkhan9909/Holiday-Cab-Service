@@ -1,6 +1,6 @@
 "use client"
 
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,8 +16,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { toast, ToastContainer } from "react-toastify";
 import CircularProgress from '@mui/material/CircularProgress';
-import { Dialog, DialogContent, } from '@mui/material';
+import { Dialog, DialogContent, IconButton, InputAdornment } from '@mui/material';
 import LoadingComponent from '@/app/components/LoadingComponent';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 const defaultTheme = createTheme();
 
 export default function SignUp() {
@@ -25,18 +28,28 @@ export default function SignUp() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setphone] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setloading] = useState(false);
-  const [loadDialog, setloadDialog] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadDialog, setLoadDialog] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!acceptedTerms) {
+      setErrors({ terms: "You must accept the privacy policy and terms & conditions" });
+      return;
+    } else {
+      setErrors({}); // Clear any previous errors
+    }
 
     try {
-      setloading(true)
-      setloadDialog(true);
-      event.preventDefault();
+      setLoading(true);
+      setLoadDialog(true);
+
       const response = await fetch("/api/user/Signup", {
         method: "POST",
         headers: {
@@ -49,32 +62,36 @@ export default function SignUp() {
           phone,
           password,
         }),
-
       });
+
       const data = await response.json();
 
-      if (data.message === "User Created Succesfully") {
-        toast.success("User Created Succesfully");
-
-        setFirstname("")
-        setEmail("")
-        setphone("")
-        setLastname("")
-        setPassword("")
+      if (data.message ==="User Created Succesfully") {
+        toast.success("User Created Successfully");
+        setFirstname("");
+        setEmail("");
+        setPhone("");
+        setLastname("");
+        setPassword("");
         router.push(`/user/verifyuser?email=${email}`);
       } else {
-
         toast.error(data.message);
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
-      toast.error("Something went wrong ");
+      toast.error("Something went wrong");
+    } finally {
+      setLoadDialog(false);
+      setLoading(false);
     }
-    finally {
-      setloadDialog(false)
-      setloading(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      const form = event.target.form;
+      const index = Array.prototype.indexOf.call(form, event.target);
+      form.elements[index + 1].focus();
+      event.preventDefault();
     }
   };
 
@@ -92,10 +109,7 @@ export default function SignUp() {
       />
 
       <ThemeProvider theme={defaultTheme}>
-
         <Container component="main" maxWidth="xs">
-
-          {/* <CssBaseline /> */}
           <Box
             sx={{
               marginTop: 8,
@@ -125,6 +139,7 @@ export default function SignUp() {
                       setFirstname(e.target.value);
                     }}
                     value={firstname}
+                    onKeyDown={handleKeyDown}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -139,6 +154,7 @@ export default function SignUp() {
                       setLastname(e.target.value);
                     }}
                     value={lastname}
+                    onKeyDown={handleKeyDown}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -153,6 +169,7 @@ export default function SignUp() {
                       setEmail(e.target.value);
                     }}
                     value={email}
+                    onKeyDown={handleKeyDown}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -164,9 +181,12 @@ export default function SignUp() {
                     name="phone"
                     autoComplete="Contact"
                     onChange={(e) => {
-                      setphone(e.target.value);
+                      setPhone(e.target.value);
                     }}
                     value={phone}
+                    onKeyDown={handleKeyDown}
+                    error={phone.length > 0 && phone.length !== 10}
+                    helperText={phone.length > 0 && phone.length !== 10 ? "Phone number must be 10 digits" : ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -175,20 +195,47 @@ export default function SignUp() {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     autoComplete="new-password"
                     onChange={(e) => {
                       setPassword(e.target.value);
                     }}
                     value={password}
+                    onKeyDown={handleKeyDown}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    control={
+                      <Checkbox
+                        color="primary"
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      />
+                    }
+                    label="I accept the privacy policy and terms & conditions"
+                    sx={{
+                      color: errors.terms ? 'red' : 'inherit',
+                    }}
                   />
+                  {errors.terms && (
+                    <Typography variant="body2" color="error">
+                      {errors.terms}
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
               <Button
@@ -199,7 +246,6 @@ export default function SignUp() {
                 disabled={loading}
               >
                 {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign Up'}
-
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
@@ -210,18 +256,17 @@ export default function SignUp() {
               </Grid>
             </Box>
           </Box>
-          <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+          <Dialog
+            open={loadDialog}
+            onClose={() => setLoadDialog(false)}
             style={{ backgroundColor: 'transparent' }}
             overlayStyle={{ backgroundColor: 'transparent' }}
-            title='Loading'
+            title="Loading"
             titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
           >
-
             <DialogContent>
               <LoadingComponent />
-
             </DialogContent>
-
           </Dialog>
         </Container>
       </ThemeProvider>

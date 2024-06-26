@@ -3,8 +3,8 @@ import React from 'react';
 const ConfirmBooking = ({ formData }) => {
     const handlePayNow = async () => {
         try {
-            // Send formData to the server to handle booking and payment
-            const response = await fetch('/api/bookCab', {
+          
+            const response = await fetch('/api/cab/BookcabPD', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -13,11 +13,11 @@ const ConfirmBooking = ({ formData }) => {
             });
 
             if (response.ok) {
-                // Booking and payment successful
+                
                 alert('Booking confirmed and payment successful!');
-                // Optionally, redirect the user to a confirmation page
+               
             } else {
-                // Handle errors
+              
                 alert('Error in booking or payment. Please try again.');
             }
         } catch (error) {
@@ -28,8 +28,8 @@ const ConfirmBooking = ({ formData }) => {
 
     const handleContactToConfirm = async () => {
         try {
-            // Send formData to the server to handle booking confirmation
-            const response = await fetch('/api/contactToConfirm', {
+         
+            const response = await fetch('/api/cab/BookcabPD', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,11 +38,8 @@ const ConfirmBooking = ({ formData }) => {
             });
 
             if (response.ok) {
-                // Booking confirmation message sent successfully
                 alert('Booking confirmation message sent successfully!');
-                // Optionally, redirect the user to a confirmation page
             } else {
-                // Handle errors
                 alert('Error in sending booking confirmation. Please try again.');
             }
         } catch (error) {

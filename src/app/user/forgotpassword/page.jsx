@@ -1,11 +1,14 @@
 "use client"
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Container, Box, Alert } from '@mui/material';
+import { Dialog, DialogContent, } from '@mui/material';
+import LoadingComponent from '@/app/components/LoadingComponent'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loadDialog, setloadDialog] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -21,8 +24,8 @@ const ForgotPassword = () => {
       return;
     }
 
-    // Perform the API call to request password reset
     try {
+      setloadDialog(true);
       const response = await fetch('/api/user/Forgotpassword', {
         method: 'POST',
         headers: {
@@ -39,6 +42,9 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       setError('Something went wrong. Please try again.');
+    }
+    finally {
+      setloadDialog(false);
     }
   };
 
@@ -67,6 +73,19 @@ const ForgotPassword = () => {
           </Button>
         </form>
       </Box>
+
+      <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+        style={{ backgroundColor: 'transparent' }}
+        overlayStyle={{ backgroundColor: 'transparent' }}
+        title='Loading'
+        titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
+      >
+
+        <DialogContent>
+          <LoadingComponent />
+        </DialogContent>
+
+      </Dialog>
     </Container>
   );
 };
