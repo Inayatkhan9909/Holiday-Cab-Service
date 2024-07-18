@@ -1,6 +1,4 @@
 "use client";
-
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
@@ -8,17 +6,17 @@ import ConfirmBooking from '@/app/components/ConfirmBooking';
 import Contact from '@/app/components/Contact';
 
 const BookCab = () => {
-    const router = useRouter();
+
     const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
     const [contactDialoge, setcontactDialoge] = useState(false);
     const [searchParams, setSearchParams] = useState({ pickup: '', drop: '', triptype: '' });
     const [formData, setFormData] = useState({
         cabType: '',
         persons: '',
-        mobile: '',
+        contact: '',
         date: '',
         time: '',
-        fullAddress: '',
+        pickupfulladdress: '',
         price: '',
         pickup: '',
         drop: '',
@@ -34,15 +32,14 @@ const BookCab = () => {
 
         setSearchParams({ pickup, drop, triptype });
         setFormData((prevData) => ({ ...prevData, pickup, drop, triptype }));
-
-        fetchPrice(pickup, drop, formData.cabType,triptype);
+        fetchPrice(pickup, drop, formData.cabType, triptype);
     }, []);
 
     useEffect(() => {
         fetchPrice(formData.pickup, formData.drop, formData.cabType, formData.triptype);
-    }, [formData.pickup, formData.drop, formData.cabType,formData.triptype]);
+    }, [formData.pickup, formData.drop, formData.cabType, formData.triptype]);
 
-    const fetchPrice = async (pickup, drop, cabType,triptype) => {
+    const fetchPrice = async (pickup, drop, cabType, triptype) => {
         try {
             const response = await fetch(`/api/admin/Getpickdropfare`);
             const data = await response.json();
@@ -55,16 +52,14 @@ const BookCab = () => {
             console.log(priceObj);
             console.log(data)
             let newprice = 0;
-            if(priceObj && triptype === "Oneway")
-                {
-                    newprice = priceObj.onewayfair;
-               }
-                if(priceObj &&  triptype === "Roundtrip")
-                    {
-                        newprice = priceObj.roundtripfair;
-                    }
-                    console.log(priceObj.onewayfair)
-                    console.log("newprice" +newprice)
+            if (priceObj && triptype === "Oneway") {
+                newprice = priceObj.onewayfair;
+            }
+            if (priceObj && triptype === "Roundtrip") {
+                newprice = priceObj.roundtripfair;
+            }
+            console.log(priceObj.onewayfair)
+            console.log("newprice" + newprice)
             setFormData((prevData) => ({ ...prevData, price: newprice ? newprice : 0 }));
         } catch (error) {
             console.error('Error fetching price:', error);
@@ -77,9 +72,9 @@ const BookCab = () => {
         setSearchParams((prevParams) => ({ ...prevParams, [name]: value }));
     };
 
-    const validateMobile = (mobile) => {
-        const mobileRegex = /^\d{10}$/;
-        return mobileRegex.test(mobile);
+    const validatecontact = (contact) => {
+        const contactRegex = /^\d{10}$/;
+        return contactRegex.test(contact);
     };
 
     const validateDateTime = (date, time) => {
@@ -98,8 +93,8 @@ const BookCab = () => {
             }
         });
 
-        if (!validateMobile(formData.mobile)) {
-            newErrors.mobile = 'Invalid mobile number';
+        if (!validatecontact(formData.contact)) {
+            newErrors.contact = 'Invalid contact number';
         }
 
         if (!validateDateTime(formData.date, formData.time)) {
@@ -127,8 +122,8 @@ const BookCab = () => {
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`);
                 const data = await response.json();
                 const address = data.results[0]?.formatted_address;
-                setFormData((prevData) => ({ ...prevData, fullAddress: address || '' }));
-                if(address ==="" || address === undefined){
+                setFormData((prevData) => ({ ...prevData, pickupfulladdress: address || '' }));
+                if (address === "" || address === undefined) {
                     alert("Unable to fetch address")
                 }
             });
@@ -245,16 +240,16 @@ const BookCab = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div className="form-control">
-                                <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">Mobile Number</label>
+                                <label htmlFor="contact" className="block text-sm font-medium text-gray-700">contact Number</label>
                                 <input
-                                    id="mobile"
-                                    name="mobile"
+                                    id="contact"
+                                    name="contact"
                                     type="text"
-                                    value={formData.mobile}
+                                    value={formData.contact}
                                     onChange={handleChange}
                                     className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile}</p>}
+                                {errors.contact && <p className="mt-2 text-sm text-red-600">{errors.contact}</p>}
                             </div>
                             <div className="form-control">
                                 <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
@@ -283,13 +278,13 @@ const BookCab = () => {
                                 {errors.time && <p className="mt-2 text-sm text-red-600">{errors.time}</p>}
                             </div>
                             <div className="form-control relative ">
-                                <label htmlFor="fullAddress" className="block text-sm font-medium text-gray-700 mr-2">Full Address</label>
+                                <label htmlFor="pickupfulladdress" className="block text-sm font-medium text-gray-700 mr-2">Full Address</label>
                                 <div className="flex items-center w-3/5">
                                     <input
-                                        id="fullAddress"
-                                        name="fullAddress"
+                                        id="pickupfulladdress"
+                                        name="pickupfulladdress"
                                         type="text"
-                                        value={formData.fullAddress}
+                                        value={formData.pickupfulladdress}
                                         onChange={handleChange}
                                         className="flex-grow mt-1 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     />
@@ -301,7 +296,7 @@ const BookCab = () => {
                                         <MyLocationIcon />
                                     </IconButton>
                                 </div>
-                                {errors.fullAddress && <p className="mt-2 text-sm text-red-600">{errors.fullAddress}</p>}
+                                {errors.pickupfulladdress && <p className="mt-2 text-sm text-red-600">{errors.pickupfulladdress}</p>}
                             </div>
 
                         </div>

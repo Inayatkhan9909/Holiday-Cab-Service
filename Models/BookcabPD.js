@@ -11,9 +11,12 @@ mongoose.model("BookcabPD", {
     email: String,
     traveldate:Date,
     traveltime: String,
-    onewayfair:Number,
-    roundtripfair:Number,
-    triptype:String,
+    tripfair:Number,
+    cabtype:String,
+    persons:Number,
+    customername:String,
+    contact:Number,
+    pickupfulladdress:String
     
 
 });

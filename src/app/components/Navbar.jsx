@@ -77,6 +77,9 @@ function ResponsiveAppBar() {
     const handlePricing = () => {
         setopenPricingDialoge(true);
     }
+    const handlePickDrop = () => {
+        router.push('/cabs/bookcab');
+    }
 
     return (
         <AppBar position="static">
@@ -152,6 +155,9 @@ function ResponsiveAppBar() {
                                         if (page === 'Pricing') {
                                             handlePricing();
                                         }
+                                        if (page === 'Pick/Drop') {
+                                            handlePickDrop();
+                                        }
                                     }}
                                 >
 
@@ -193,6 +199,9 @@ function ResponsiveAppBar() {
                                     }
                                     if (page === 'Pricing') {
                                         handlePricing();
+                                    }
+                                    if (page === 'Pick/Drop') {
+                                        handlePickDrop();
                                     }
                                 }}
                                 sx={{ my: 2, color: 'white', display: 'block', margin: '5px' }}
@@ -252,9 +261,9 @@ function ResponsiveAppBar() {
                     </DialogActions>
                 </Dialog>
                 <Dialog open={openPricingDialoge} onClose={() => setopenPricingDialoge(false)}>
-                    
+
                     <DialogContent>
-                       <PricingComponent/>
+                        <PricingComponent />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setopenPricingDialoge(false)} color="primary">

@@ -8,7 +8,7 @@ mongoose.model("User", {
   phone:Number,
   email: String,
   password: String,
-  otp:String,
+  otp:String, 
   otpExpiry:Date,
   forgotpasswordToken:String,
   forgotpasswordTokenExpiry:Date,

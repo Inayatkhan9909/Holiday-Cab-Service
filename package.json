@@ -29,7 +29,8 @@
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "react-toastify": "^10.0.5",
-    "toastify": "^2.0.1"
+    "toastify": "^2.0.1",
+    "twilio": "^5.2.2"
   },
   "devDependencies": {
     "eslint": "^8",

@@ -26,7 +26,6 @@ const CreateTrip = async(req,res) =>{
         pickup,
         drop,
         cabtype,
-        
         onewayfair,
         roundtripfair
 
