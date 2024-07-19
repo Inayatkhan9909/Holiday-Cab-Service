@@ -3,11 +3,13 @@ require("dotenv").config();
 const url = process.env.DB_URL;
 
  const ConnectDb = async () =>{
-
-if(mongoose.connections[0].readyState)  {
-        return
-    }
+   console.log(url);
+   if (mongoose.connections[0].readyState) {
+    console.log("Using existing connection");
+    return;
+  }
     try {
+        console.log("connect lapasa");
         await mongoose.connect(url);
         console.log("Database Connected"+url)
     } catch (error) {

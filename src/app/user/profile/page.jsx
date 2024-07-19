@@ -30,7 +30,7 @@ const page = () => {
       <h1>User Profile</h1>
       {user && (
         <div>
-          <p>Name: {user.name}</p>
+          <p>Name: {user.firstname } {user.lastname}</p>
           <p>Email: {user.email}</p>
          
         </div>

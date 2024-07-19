@@ -1,36 +1,44 @@
 import errorHandler from "../../../utils/Features";
 import ConnectDb from "../../../utils/DbConnect";
-import BookcabPD from "../../../Models/BookcabPD";
+import BookcabPD from "../../../Models/ConfirmBookcabPD"
 
-const Bookcab = async (req, res) => {
+const Bookcab = async (req,res) =>{
 
     if (req.method !== "POST") {
-        return errorHandler(res, 400, "Only POST Method is allowed");
+        return errorHandler(res, 405, "Method Not Allowed");
     }
 
-    try {
+      try {
+        const { pickup, drop, triptype, email, traveldate,
+            traveltime,  cabtype, persons, customername, contact, pickupfulladdress } = req.body;
+            const tripfair = req.body.price;
+            console.log(req.body)
 
-        const { pickup, drop, ridetype, email, traveldate,
-            traveltime, tripfair, cabtype, persons, customername, contact, pickupfulladdress } = req.body;
+            if (!pickup || !drop || !triptype || !email || !traveldate || !traveltime ||
+                !tripfair || !cabtype || !persons || !customername || !contact || !pickupfulladdress) {
+                return errorHandler(res, 400, "All fields are required");
+            }
+           await ConnectDb();
 
-        if (ridetype === "", pickup === "" && drop === "" && cabtype === "" && email === "" && traveldate === "" && traveltime === ""
-            && customername === "" && contact === "" && tripfair === "" && persons === "" && pickupfulladdress === "") {
-            return errorHandler(res, 400, "All Credentials Required!");
-        }
-
-        await ConnectDb();
-
-        const bookcab = BookcabPD.create({
-            pickup, drop, ridetype, email, traveldate,
+           const bookcab =  await  BookcabPD.create({
+            pickup, drop, ridetype:triptype, email, traveldate,
             traveltime, tripfair, cabtype, persons, customername, contact, pickupfulladdress
-        })
+        });
 
-        if (bookcab) {
-            res.status(201).json({ message: "Cab booking Succesfully" });
+        if (!bookcab) {
+            return errorHandler(res, 400, "something went wrong try again");
         }
+        return res.status(201).json({ message: "Cab booking successful", booking: bookcab });
 
-    } catch (error) {
+      } catch (error) {
+        if (error.name === 'ValidationError') {
+            const validationErrors = Object.values(error.errors).map(err => err.message);
+            console.log(validationErrors)
+            return errorHandler(res, 400, "Validation failed", validationErrors);
+        }
         console.log(error);
-        errorHandler(res, 500, "Server Error");
-    }
+        return errorHandler(res, 500, "Server Error");
+      }
 }
+
+export default Bookcab;

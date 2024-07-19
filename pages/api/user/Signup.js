@@ -42,7 +42,7 @@ const SignupHandler = async (req, res) => {
         }
 
         const passencrypt = await bcrypt.hash(password, 10);
-        const user = User.create({
+        const user = await User.create({
             firstname,
             lastname,
             email,

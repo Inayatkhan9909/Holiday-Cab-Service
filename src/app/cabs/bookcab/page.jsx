@@ -4,25 +4,57 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton }
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import ConfirmBooking from '@/app/components/ConfirmBooking';
 import Contact from '@/app/components/Contact';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUser, selectUser, selectLoading, selectError } from '../../features/user/userSlice';
 
 const BookCab = () => {
+    const dispatch = useDispatch();
+    const user = useSelector(selectUser);
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+  
 
     const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
     const [contactDialoge, setcontactDialoge] = useState(false);
     const [searchParams, setSearchParams] = useState({ pickup: '', drop: '', triptype: '' });
+    const [fullname,setFullname] = useState("");
+    const [email,setEmail] = useState("");
     const [formData, setFormData] = useState({
-        cabType: '',
+        cabtype: '',
         persons: '',
         contact: '',
-        date: '',
-        time: '',
+        traveldate: '',
+        traveltime: '',
         pickupfulladdress: '',
         price: '',
         pickup: '',
         drop: '',
-        triptype: ''
+        triptype: '',
+        email:"",
+        customername:''  
     });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        console.log("User data:", user);
+        if (user && user.firstname && user.lastname && user.email) {
+            console.log("Setting fullname and email");
+            setFullname(user.firstname + " " + user.lastname);
+            setEmail(user.email);
+        } else {
+            console.log("User data not complete");
+        }
+        
+    }, [user]);
+
+    useEffect(() => {
+        setFormData(prevData => ({
+            ...prevData,
+            customername: fullname,
+            email: email
+        }));
+    }, [fullname, email]);
+    
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -32,25 +64,27 @@ const BookCab = () => {
 
         setSearchParams({ pickup, drop, triptype });
         setFormData((prevData) => ({ ...prevData, pickup, drop, triptype }));
-        fetchPrice(pickup, drop, formData.cabType, triptype);
-    }, []);
+        fetchPrice(pickup, drop, formData.cabtype, triptype);
+        dispatch(fetchUser());
+       
+             
+        
+    }, [dispatch]);
 
     useEffect(() => {
-        fetchPrice(formData.pickup, formData.drop, formData.cabType, formData.triptype);
-    }, [formData.pickup, formData.drop, formData.cabType, formData.triptype]);
+        fetchPrice(formData.pickup, formData.drop, formData.cabtype, formData.triptype);
+    }, [formData.pickup, formData.drop, formData.cabtype, formData.triptype]);
 
-    const fetchPrice = async (pickup, drop, cabType, triptype) => {
+    const fetchPrice = async (pickup, drop, cabtype, triptype) => {
         try {
             const response = await fetch(`/api/admin/Getpickdropfare`);
             const data = await response.json();
             const priceObj = data.find(item =>
                 item.pickup === pickup &&
                 item.drop === drop &&
-                item.cabtype === cabType
+                item.cabtype === cabtype
 
             );
-            console.log(priceObj);
-            console.log(data)
             let newprice = 0;
             if (priceObj && triptype === "Oneway") {
                 newprice = priceObj.onewayfair;
@@ -58,8 +92,7 @@ const BookCab = () => {
             if (priceObj && triptype === "Roundtrip") {
                 newprice = priceObj.roundtripfair;
             }
-            console.log(priceObj.onewayfair)
-            console.log("newprice" + newprice)
+          
             setFormData((prevData) => ({ ...prevData, price: newprice ? newprice : 0 }));
         } catch (error) {
             console.error('Error fetching price:', error);
@@ -77,8 +110,8 @@ const BookCab = () => {
         return contactRegex.test(contact);
     };
 
-    const validateDateTime = (date, time) => {
-        const selectedDateTime = new Date(`${date}T${time}`);
+    const validateDateTime = (traveldate, traveltime) => {
+        const selectedDateTime = new Date(`${traveldate}T${traveltime}`);
         const now = new Date();
         const tenHoursLater = new Date(now.getTime() + 10 * 60 * 60 * 1000);
         return selectedDateTime > now && selectedDateTime >= tenHoursLater;
@@ -86,6 +119,7 @@ const BookCab = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(formData)
         const newErrors = {};
         Object.keys(formData).forEach((key) => {
             if (!formData[key] && key !== 'price') {
@@ -97,7 +131,7 @@ const BookCab = () => {
             newErrors.contact = 'Invalid contact number';
         }
 
-        if (!validateDateTime(formData.date, formData.time)) {
+        if (!validateDateTime(formData.traveldate, formData.traveltime)) {
             newErrors.date = 'Date and time must be in the future and at least 10 hours from now';
             newErrors.time = 'Date and time must be in the future and at least 10 hours from now';
         }
@@ -206,10 +240,11 @@ const BookCab = () => {
                             <div className="form-control">
                                 <label htmlFor="cabType" className="block text-sm font-medium text-gray-700">Cab Type</label>
                                 <select
-                                    id="cabType"
-                                    name="cabType"
-                                    value={formData.cabType}
+                                    id="cabtype"
+                                    name="cabtype"
+                                    value={formData.cabtype}
                                     onChange={handleChange}
+                                   
                                     className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Cab Type</option>
@@ -219,7 +254,7 @@ const BookCab = () => {
                                     <option value="Innova">Innova</option>
                                     <option value="Traveler">Traveler</option>
                                 </select>
-                                {errors.cabType && <p className="mt-2 text-sm text-red-600">{errors.cabType}</p>}
+                                {errors.cabtype && <p className="mt-2 text-sm text-red-600">{errors.cabtype}</p>}
                             </div>
                             <div className="form-control">
                                 <label htmlFor="persons" className="block text-sm font-medium text-gray-700">Persons</label>
@@ -255,13 +290,13 @@ const BookCab = () => {
                                 <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
                                 <input
                                     id="date"
-                                    name="date"
+                                    name="traveldate"
                                     type="date"
-                                    value={formData.date}
+                                    value={formData.traveldate}
                                     onChange={handleChange}
                                     className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                {errors.date && <p className="mt-2 text-sm text-red-600">{errors.date}</p>}
+                                {errors.traveldate && <p className="mt-2 text-sm text-red-600">{errors.traveldate}</p>}
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -269,13 +304,13 @@ const BookCab = () => {
                                 <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
                                 <input
                                     id="time"
-                                    name="time"
+                                    name="traveltime"
                                     type="time"
-                                    value={formData.time}
+                                    value={formData.traveltime}
                                     onChange={handleChange}
                                     className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
-                                {errors.time && <p className="mt-2 text-sm text-red-600">{errors.time}</p>}
+                                {errors.traveltime && <p className="mt-2 text-sm text-red-600">{errors.traveltime}</p>}
                             </div>
                             <div className="form-control relative ">
                                 <label htmlFor="pickupfulladdress" className="block text-sm font-medium text-gray-700 mr-2">Full Address</label>
