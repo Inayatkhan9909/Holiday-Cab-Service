@@ -49,7 +49,7 @@ const PickDrop = () => {
     e.preventDefault();
     if (!validate()) return;
     try {
-      const res = await fetch('/api/admin/PickupDropfare', {
+      const res = await fetch('/api/admin/pickdropfare/PickupDropfare', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -4,9 +4,6 @@ import Packages from "./components/Packages";
 import Cabs from "./components/Cabs";
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
-
 export default function Home() {
   return (
        

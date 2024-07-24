@@ -73,7 +73,7 @@ const Pickdrop = () => {
 
   const handleEditSubmit = async () => {
     try {
-      const response = await fetch('/api/admin/Editpickdropfare', {
+      const response = await fetch('/api/admin/pickdropfare/Editpickdropfare', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const Pickdrop = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await fetch('/api/admin/Deletepickdropfare', {
+      const response = await fetch('/api/admin/pickdropfare/Deletepickdropfare', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

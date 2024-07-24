@@ -28,6 +28,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [loadDialog, setLoadDialog] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [remember,setRemember] = useState(false);
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,7 +45,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password,remember })
       });
 
       const data = await response.json();
@@ -132,6 +133,8 @@ export default function Login() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
             />
             <Button
               type="submit"

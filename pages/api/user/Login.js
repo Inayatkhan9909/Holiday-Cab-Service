@@ -16,7 +16,7 @@ const LoginHandler = async (req,res) => {
     }
 
     try {
-        const { email, password } = req.body;
+        const { email, password,remember } = req.body;
         if (email === "" && password === "") {
             return errorHandler(res, 400, "All Credentials required");
         }
@@ -33,7 +33,7 @@ const LoginHandler = async (req,res) => {
             return errorHandler(res, 401, "Incorrect password");
         }
 
-        const token = jwt.sign({ id: user._id }, secretkey,{expiresIn:"1d"});
+        const token = jwt.sign({ id: user._id }, secretkey,{expiresIn: remember ? "30d" : "1d"});
         if (token) {
            
             res.setHeader(
@@ -41,7 +41,7 @@ const LoginHandler = async (req,res) => {
                 cookie.serialize("token", token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== "development",
-                    maxAge: 60 * 60 * 24, 
+                    maxAge:  remember ? 30 * 24 * 60 * 60 : 24 * 60 * 60, 
                     sameSite: "strict",
                     path: '/', 
                 })

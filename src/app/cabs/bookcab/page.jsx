@@ -36,7 +36,7 @@ const BookCab = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        console.log("User data:", user);
+      
         if (user && user.firstname && user.lastname && user.email) {
             console.log("Setting fullname and email");
             setFullname(user.firstname + " " + user.lastname);

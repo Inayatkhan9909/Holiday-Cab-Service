@@ -38,18 +38,18 @@ const Adminpage = () => {
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom>
-                Add Packages
+                View bookings
               </Typography>
               <Typography variant="body2">
-                Click to add new travel packages.
+             View all the bookings done in pick and drop
               </Typography>
               <Button
                 variant="contained"
                 color="primary"
                 sx={{ mt: 2 }}
-                onClick={() => handleNavigation('/admin/addpackages')}
+                onClick={() => handleNavigation('/admin/pickdrop/GetAllPDbookings')}
               >
-                Add Packages
+               Bookings
               </Button>
             </CardContent>
           </Card>

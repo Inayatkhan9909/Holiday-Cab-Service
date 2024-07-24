@@ -16,7 +16,6 @@ const Getuser = async (req, res) => {
         await ConnectDb();
         const decoded = jwt.verify(token, secretkey);
         const userId = decoded.id;
-
         const user = await User.findById(userId);
         if (!user) {
             return errorHandler(res, 400, "No user Found");
