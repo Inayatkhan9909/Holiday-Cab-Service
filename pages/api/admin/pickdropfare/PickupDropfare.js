@@ -1,7 +1,7 @@
 
-import errorHandler from "../../../utils/Features";
-import ConnectDb from "../../../utils/DbConnect";
-import PickDrop from "../../../Models/pickdropfareModel";
+import errorHandler from "../../../../utils/Features";
+import ConnectDb from "../../../../utils/DbConnect";
+import PickDrop from "../../../../Models/pickdropfareModel";
 
 const CreateTrip = async(req,res) =>{
 
