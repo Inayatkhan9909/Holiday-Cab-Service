@@ -36,8 +36,9 @@ const Bookcab = async (req, res) => {
         const bookingId = bookcab.id;
       
        await User.findByIdAndUpdate(user._id, { $push: { PDbookings: bookingId } });
+       const pageUrl = process.env.PAGE_URL;
 
-        const cancelBookingUrl = "sdkfjlsdjfkldskljf";
+        const cancelBookingUrl = `${pageUrl}`;
 
         const html = `
             <h1>Cab Booking Successfull</h1>
@@ -73,7 +74,6 @@ const Bookcab = async (req, res) => {
         Time: ${traveltime}
         Cab: ${cabtype}
         Persons: ${persons}
-        
         To cancel, visit:
         ${cancelBookingUrl}
         

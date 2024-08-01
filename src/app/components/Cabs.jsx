@@ -13,25 +13,25 @@ const Cabs = () => {
             id: 1,
             title: 'Switft Dezire',
             description: 'Enjoy the sunny beaches with our exclusive package.',
-            image: '/pexels-salman-mansuri-597168-15317850.jpg',
+            image: '/images/Swiftcab_img.png',
         },
         {
             id: 2,
             title: 'Amaze',
             description: 'Experience the thrill of mountain adventures.',
-            image: '/pexels-salman-mansuri-597168-15317850.jpg',
+            image: '/images/honda_amaze_img.jpeg',
         },
         {
             id: 3,
             title: 'Innova',
             description: 'Explore the city with our guided tours.',
-            image: '/pexels-salman-mansuri-597168-15317850.jpg',
+            image: '/images/innovacab_img.jpeg',
         },
         {
             id: 4,
             title: 'Traveller',
             description: 'Relax on a luxury cruise with our special package.',
-            image: '/pexels-salman-mansuri-597168-15317850.jpg',
+            image: '/images/travellercab_img.jpeg',
         },
     ];
     return (

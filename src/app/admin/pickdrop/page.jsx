@@ -44,7 +44,7 @@ const Pickdrop = () => {
   useEffect(() => {
     const fetchCabFares = async () => {
       try {
-        const response = await fetch('/api/admin/Getpickdropfare');
+        const response = await fetch('/api/admin/pickdropfare/Getpickdropfare');
         const data = await response.json();
         setCabFares(data);
       } catch (error) {

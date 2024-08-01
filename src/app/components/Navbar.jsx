@@ -91,6 +91,9 @@ function ResponsiveAppBar() {
   const handlePickDrop = () => {
     router.push('/cabs/bookcab');
   };
+  const handlePackages = () => {
+    router.push('/cabs/allpackages');
+  };
 
   return (
     <AppBar position="static">
@@ -162,6 +165,7 @@ function ResponsiveAppBar() {
                     if (page === 'Contact') handleContact();
                     if (page === 'Pricing') handlePricing();
                     if (page === 'Pick/Drop') handlePickDrop();
+                    if (page === 'Packages') handlePackages();
                   }}
                 >
                   <Typography textAlign="center">{page}</Typography>
@@ -198,6 +202,7 @@ function ResponsiveAppBar() {
                   if (page === 'Contact') handleContact();
                   if (page === 'Pricing') handlePricing();
                   if (page === 'Pick/Drop') handlePickDrop();
+                  if (page === 'Packages') handlePackages();
                 }}
                 sx={{ my: 2, color: 'white', display: 'block', margin: '5px' }}
               >

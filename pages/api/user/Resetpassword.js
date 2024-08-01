@@ -39,8 +39,8 @@ const Resetpassword = async (req, res) => {
         if (!sendtoken) {
             return res.status(404).send({ message: 'Password reset failed. Try again' });
         }
-
-        const loginurl = `http://localhost:3000/user/login`;
+        const pageUrl = process.env.PAGE_URL;
+        const loginurl = `${pageUrl}/user/login`;
         const html = `<p>Your OTP code is: <b>Your password  is successfully changed</b></p> <br/> <p>Click here to login</p> <br/> <p>${loginurl}</p>`;
         const sent = await sendEmail(email, 'Password Successfull', html);
 

@@ -27,7 +27,9 @@ const Verifyuser = async (req, res) => {
             return res.status(404).send({ message: 'Password reset failed. Try again' });
         }
 
-        const verificationUrl = `http://localhost:3000/user/resetpassword?email=${encodeURIComponent(email)}&forgotpasswordtoken=${encodeURIComponent(forgotpasswordToken)}`;
+        const pageUrl = process.env.PAGE_URL;
+
+        const verificationUrl = `${pageUrl}/user/resetpassword?email=${encodeURIComponent(email)}&forgotpasswordtoken=${encodeURIComponent(forgotpasswordToken)}`;
         const html = `<p>Your OTP code is: <b>Password reset link</b></p> <br/> <p>${verificationUrl}</p>`;
         const sent = await sendEmail(email, 'Password Reset', html);
         if (!sent) {

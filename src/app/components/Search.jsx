@@ -58,10 +58,11 @@ const Search = () => {
         alignItems: 'center',
         p: 2,
         width: { xs: '90vw' },
-        border: '1px solid black'
+        border: '1px solid black',
+        borderRadius: '15px'
       }}
     >
-      <Grid container spacing={1} sx={{width:{sm:'60%',sx:'100%'}, justifyContent: 'center', alignItems: 'center' }}>
+      <Grid container spacing={1} sx={{width:{sm:'60%',sx:'95%'}, justifyContent: 'center', alignItems: 'center' }}>
         <Grid item  sm={5} lg={4} xs={5}>
           <FormControl fullWidth  error={pickupError}>
             <InputLabel id="pickup_select">Pickup</InputLabel>

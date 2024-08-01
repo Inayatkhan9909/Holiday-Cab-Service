@@ -31,7 +31,8 @@ const SignupHandler = async (req, res) => {
         }
         const verified = false;
         const otp = GenerateOtp();
-        const verificationUrl = `http://localhost:3000/user/Verifyuser?email=${encodeURIComponent(email)}`;
+        const pageUrl = process.env.PAGE_URL;
+        const verificationUrl = `${pageUrl}/user/Verifyuser?email=${encodeURIComponent(email)}`;
         const html = `<p>Your OTP code is: <b>${otp}</b></p> <br/> <p>${verificationUrl}</p>`;
         const sent = await sendEmail(email, 'OTP Verification', html);
 
