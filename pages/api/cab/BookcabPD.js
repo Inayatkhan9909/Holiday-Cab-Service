@@ -3,33 +3,39 @@ import ConnectDb from "../../../utils/DbConnect";
 import BookcabPD from "../../../Models/ConfirmBookcabPD"
 import sendEmail from "../../../utils/Sendmail";
 import SendSMS from "../../../utils/SendSMS";
+import User from "../../../Models/userModel"
 
-const Bookcab = async (req,res) =>{
+const Bookcab = async (req, res) => {
 
     if (req.method !== "POST") {
         return errorHandler(res, 405, "Method Not Allowed");
     }
 
-      try {
+    try {
         const { pickup, drop, triptype, email, traveldate,
-            traveltime,  cabtype, persons, customername, contact, pickupfulladdress } = req.body;
-            const tripfair = req.body.price;
-            console.log(req.body)
+            traveltime, cabtype, persons, customername, contact, pickupfulladdress } = req.body;
+        const tripfair = req.body.price;
 
-            if (!pickup || !drop || !triptype || !email || !traveldate || !traveltime ||
-                !tripfair || !cabtype || !persons || !customername || !contact || !pickupfulladdress) {
-                return errorHandler(res, 400, "All fields are required");
-            }
-           await ConnectDb();
+        if (!pickup || !drop || !triptype || !email || !traveldate || !traveltime ||
+            !tripfair || !cabtype || !persons || !customername || !contact || !pickupfulladdress) {
+            return errorHandler(res, 400, "All fields are required");
+        }
+        await ConnectDb();
 
-           const bookcab =  await  BookcabPD.create({
-            pickup, drop, ridetype:triptype, email, traveldate,
-            traveltime, tripfair, cabtype, persons, customername, contact, pickupfulladdress
+        const user = await User.findOne({ email });
+       
+
+        const bookcab = await BookcabPD.create({
+            pickup, drop, ridetype: triptype, email, traveldate,
+            traveltime, tripfair, cabtype, persons, customername, contact, pickupfulladdress, user: user._id
         });
 
         if (!bookcab) {
             return errorHandler(res, 400, "something went wrong try again");
         }
+        const bookingId = bookcab.id;
+      
+       await User.findByIdAndUpdate(user._id, { $push: { PDbookings: bookingId } });
 
         const cancelBookingUrl = "sdkfjlsdjfkldskljf";
 
@@ -51,7 +57,7 @@ const Bookcab = async (req,res) =>{
             <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
             <p>Thank you for choosing our service!</p>
         `;
-        
+
         const sentemail = await sendEmail(email, 'Cab Booking Successfull', html);
         if (!sentemail) {
             return res.status(404).send({ message: 'Failed to send confirmation email. Please contact support.' });
@@ -73,15 +79,15 @@ const Bookcab = async (req,res) =>{
         
         Thank you for choosing our service!
                 `.trim();
-        const sentSMS = await SendSMS(contact,smsBody);
-        if(!sentSMS){
+        const sentSMS = await SendSMS(contact, smsBody);
+        if (!sentSMS) {
             return res.status(404).send({ message: 'Failed to send confirmation SMS. Please check mobile .' });
         }
 
         res.status(200).send({ message: 'Cab Booking Successfull' });
         return res.status(201).json({ message: "Cab booking successful", booking: bookcab });
 
-      } catch (error) {
+    } catch (error) {
         if (error.name === 'ValidationError') {
             const validationErrors = Object.values(error.errors).map(err => err.message);
             console.log(validationErrors)
@@ -89,7 +95,7 @@ const Bookcab = async (req,res) =>{
         }
         console.log(error);
         return errorHandler(res, 500, "Server Error");
-      }
+    }
 }
 
 export default Bookcab;

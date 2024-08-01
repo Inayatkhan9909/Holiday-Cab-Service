@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "../Models/userModel"
 
 const bookCabPDSchema = new mongoose.Schema({
   pickup: { 
@@ -74,8 +75,10 @@ const bookCabPDSchema = new mongoose.Schema({
     trim: true, 
     minlength: [5, "Address must be at least 5 characters long"], 
     maxlength: [200, "Address cannot exceed 200 characters"] 
-  }
-}, { timestamps: true });
+  },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+},
+ { timestamps: true });
 
 const BookcabPD = mongoose.models.BookcabPd || mongoose.model("BookcabPd", bookCabPDSchema);
 

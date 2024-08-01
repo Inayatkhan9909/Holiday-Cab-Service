@@ -1,6 +1,6 @@
-import errorHandler from "../../../utils/Features";
-import ConnectDb from "../../../utils/DbConnect";
-import PickDrop from "../../../Models/pickdropfareModel";
+import errorHandler from "../../../../utils/Features";
+import ConnectDb from "../../../../utils/DbConnect";
+import PickDrop from "../../../../Models/pickdropfareModel";
 
 const Getpickdropfare = async (req, res) => {
   if (req.method !== "GET") {

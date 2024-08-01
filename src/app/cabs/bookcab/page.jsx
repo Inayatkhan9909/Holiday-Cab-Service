@@ -77,7 +77,7 @@ const BookCab = () => {
 
     const fetchPrice = async (pickup, drop, cabtype, triptype) => {
         try {
-            const response = await fetch(`/api/admin/Getpickdropfare`);
+            const response = await fetch(`/api/admin/pickdropfare/Getpickdropfare`);
             const data = await response.json();
             const priceObj = data.find(item =>
                 item.pickup === pickup &&
