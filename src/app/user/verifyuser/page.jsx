@@ -1,8 +1,7 @@
 "use client"
-import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Container, Typography, Box, Dialog, DialogContent } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { Dialog, DialogContent, } from '@mui/material';
 import LoadingComponent from '@/app/components/LoadingComponent';
 
 const VerifyUser = () => {
@@ -10,9 +9,15 @@ const VerifyUser = () => {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [loadDialog, setloadDialog] = useState(false);
-    const params = new URLSearchParams(window.location.search);
-    const email = params.get('email') || "";
+    const [loadDialog, setLoadDialog] = useState(false);
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            setEmail(params.get('email') || "");
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,7 +25,7 @@ const VerifyUser = () => {
         setSuccess('');
 
         try {
-            setloadDialog(true)
+            setLoadDialog(true);
             const response = await fetch('/api/user/Verifyuser', {
                 method: 'POST',
                 headers: {
@@ -33,15 +38,14 @@ const VerifyUser = () => {
 
             if (response.ok) {
                 setSuccess(data.message);
-                router.push("/user/login")
+                router.push("/user/login");
             } else {
                 setError(data.message);
             }
         } catch (err) {
             setError('An error occurred. Please try again.');
-        }
-        finally {
-            setloadDialog(false)
+        } finally {
+            setLoadDialog(false);
         }
     };
 
@@ -93,20 +97,17 @@ const VerifyUser = () => {
                     Verify OTP
                 </Button>
             </Box>
-            <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+            <Dialog open={loadDialog} onClose={() => setLoadDialog(false)}
                 style={{ backgroundColor: 'transparent' }}
                 overlayStyle={{ backgroundColor: 'transparent' }}
                 title='Loading'
                 titleStyle={{ paddingTop: '0px', paddingLeft: '45px', fontSize: '15px', lineHeight: '40px' }}
             >
-
                 <DialogContent>
-                    <LoadingComponent/>
+                    <LoadingComponent />
                 </DialogContent>
-
             </Dialog>
-
-        </Container >
+        </Container>
     );
 };
 
