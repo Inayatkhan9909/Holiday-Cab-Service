@@ -84,7 +84,6 @@ const Bookcab = async (req, res) => {
             return res.status(404).send({ message: 'Failed to send confirmation SMS. Please check mobile .' });
         }
 
-        res.status(200).send({ message: 'Cab Booking Successfull' });
         return res.status(201).json({ message: "Cab booking successful", booking: bookcab });
 
     } catch (error) {
