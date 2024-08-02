@@ -75,18 +75,18 @@ const ConfirmBooking = ({ formData }) => {
 
                 </div>
                 <p className="mb-6 text-gray-600">Note: Your booking will be confirmed within 5 minutes.</p>
-                <div className="flex justify-between">
+                <div className="flex justify-between gap-2">
                     <button
                         onClick={handlePayNow}
                         className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700"
                     >
-                      Book &  Pay Now  
+                      Pay Now  
                     </button>
                     <button
                         onClick={handleBookandContactoffice}
-                        className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        className="md:px-6 md:py-3 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                     >
-                       Book & Contact office
+                       Book & Pay later
                     </button>
                 </div>
             </div>

@@ -174,7 +174,7 @@ const BookCab = () => {
                         <div className="mb-6 text-center">
                             <h2 className="text-2xl md:text-3xl font-semibold mb-2">Book a Cab</h2>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6  mb-6 ">
                             <div className="form-control">
                                 <label htmlFor="pickup" className="block text-sm font-medium text-gray-700">Pickup</label>
                                 <select
@@ -182,7 +182,7 @@ const BookCab = () => {
                                     name="pickup"
                                     value={formData.pickup}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Pickup Location</option>
                                     <option value="Srinagar">Srinagar</option>
@@ -202,7 +202,7 @@ const BookCab = () => {
                                     name="drop"
                                     value={formData.drop}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Drop Location</option>
                                     <option value="Srinagar">Srinagar</option>
@@ -222,7 +222,7 @@ const BookCab = () => {
                                     name="triptype"
                                     value={formData.triptype}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Trip Type</option>
                                     <option value="Oneway">One way</option>
@@ -245,7 +245,7 @@ const BookCab = () => {
                                     value={formData.cabtype}
                                     onChange={handleChange}
                                    
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Cab Type</option>
                                     <option value="Swift dzire">Swift dzire</option>
@@ -263,7 +263,7 @@ const BookCab = () => {
                                     name="persons"
                                     value={formData.persons}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 >
                                     <option value="">Select Number of Persons</option>
                                     {Array.from({ length: 15 }, (_, i) => (
@@ -282,7 +282,7 @@ const BookCab = () => {
                                     type="text"
                                     value={formData.contact}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
                                 {errors.contact && <p className="mt-2 text-sm text-red-600">{errors.contact}</p>}
                             </div>
@@ -294,7 +294,7 @@ const BookCab = () => {
                                     type="date"
                                     value={formData.traveldate}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
                                 {errors.traveldate && <p className="mt-2 text-sm text-red-600">{errors.traveldate}</p>}
                             </div>
@@ -308,13 +308,13 @@ const BookCab = () => {
                                     type="time"
                                     value={formData.traveltime}
                                     onChange={handleChange}
-                                    className="mt-1 block w-3/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
                                 {errors.traveltime && <p className="mt-2 text-sm text-red-600">{errors.traveltime}</p>}
                             </div>
                             <div className="form-control relative ">
                                 <label htmlFor="pickupfulladdress" className="block text-sm font-medium text-gray-700 mr-2">Full Address</label>
-                                <div className="flex items-center w-3/5">
+                                <div className="flex items-center w-4/5">
                                     <input
                                         id="pickupfulladdress"
                                         name="pickupfulladdress"
