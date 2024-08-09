@@ -42,6 +42,10 @@ const SignupHandler = async (req, res) => {
         }
 
         const passencrypt = await bcrypt.hash(password, 10);
+        let isAdmin = false;
+        if ( email === process.env.MY_EMAIL) {
+          isAdmin = true;
+        }
         const user = await User.create({
             firstname,
             lastname,
@@ -49,7 +53,8 @@ const SignupHandler = async (req, res) => {
             phone,
             otp,
             verified,
-            password: passencrypt
+            password: passencrypt,
+            isAdmin
 
         });
 

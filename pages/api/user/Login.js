@@ -33,7 +33,7 @@ const LoginHandler = async (req,res) => {
             return errorHandler(res, 401, "Incorrect password");
         }
 
-        const token = jwt.sign({ id: user._id }, secretkey,{expiresIn: remember ? "30d" : "1d"});
+        const token = jwt.sign({ id: user._id,isAdmin: user.isAdmin  }, secretkey,{expiresIn: remember ? "30d" : "1d"});
         if (token) {
            
             res.setHeader(

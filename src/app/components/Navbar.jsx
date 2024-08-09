@@ -69,7 +69,7 @@ function ResponsiveAppBar() {
       const data = await response.json();
       if (data.message === "Logout Successfully") {
         toast.success(data.message);
-        dispatch(fetchUser());
+        
         router.push("/user/login");
       } else {
         toast.error(data.message);
