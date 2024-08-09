@@ -47,7 +47,7 @@ const Adminpage = () => {
                 variant="contained"
                 color="primary"
                 sx={{ mt: 2 }}
-                onClick={() => handleNavigation('/admin/pickdrop/GetAllPDbookings')}
+                onClick={() => handleNavigation('/admin/packages')}
               >
                Bookings
               </Button>
@@ -67,7 +67,7 @@ const Adminpage = () => {
                 variant="contained"
                 color="primary"
                 sx={{ mt: 2 }}
-                onClick={() => handleNavigation('/admin/editcontact')}
+                onClick={() => handleNavigation('/contact')}
               >
                 Edit Contact Page
               </Button>
