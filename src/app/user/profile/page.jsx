@@ -5,7 +5,7 @@ import { fetchUser, selectUser, selectLoading as selectUserLoading, selectError 
 import { fetchUserPDbookings, selectUserPDbooking, selectLoading as selectBookingLoading, selectError as selectBookingError } from '../../features/user/userPDbookingSlice';
 import {
   Box, Grid, Card, CardContent, CardHeader, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  Typography, IconButton, CircularProgress,
+  Typography, IconButton, CircularProgress, Button
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -73,6 +73,16 @@ const Page = () => {
               <CardContent>
                 <Typography variant="body1"><strong>Name:</strong> {user.firstname} {user.lastname}</Typography>
                 <Typography variant="body1"><strong>Email:</strong> {user.email}</Typography>
+                {
+                  user.isAdmin && <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mb: 2 }}
+                    href='/admin'
+                  >
+                    Admin
+                  </Button>
+                }
               </CardContent>
             </Card>
           </Grid>
