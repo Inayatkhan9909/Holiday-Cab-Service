@@ -13,18 +13,26 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchgetPackage,
+  selectGetPackage,
+} from "@/app/features/packages/getPackageSlice";
 
 const Packages = () => {
   const router = useRouter();
-  const [packages, setPackages] = useState([]);
+  const dispatch = useDispatch();
+  const { items, loading, error } = useSelector(selectGetPackage);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     packagename: "",
     pickup: "",
@@ -35,18 +43,8 @@ const Packages = () => {
   });
 
   useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const response = await fetch("/api/admin/packages/Getpackages");
-        const data = await response.json();
-        setPackages(data);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-      }
-    };
-
-    fetchPackages();
-  }, []);
+    dispatch(fetchgetPackage());
+  }, [dispatch]);
 
   const handleAdd = () => {
     router.push("/admin/packages/createpackages");
@@ -130,74 +128,84 @@ const Packages = () => {
       >
         Add Package
       </Button>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "repeat(1, 1fr)",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(4, 1fr)",
-            xl: "repeat(5, 1fr)",
-          },
-          gap: 2,
-        }}
-      >
-        {packages.map((packageData) => (
-          <Card
-            key={packageData._id}
-            sx={{
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              height: "400px", // Fixed height for the card
-            }}
-          >
-            <CardMedia
-              component="img"
-              image={packageData.destinationimageurl}
-              alt={packageData.packagename}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
+              lg: "repeat(4, 1fr)",
+              xl: "repeat(5, 1fr)",
+            },
+            gap: 2,
+          }}
+        >
+          {items.map((packageData) => (
+            <Card
+              key={packageData._id}
               sx={{
-                height: "200px", // Fixed height for the image
-                objectFit: "cover", // Ensure the image covers the area
-              }}
-            />
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="h5" component="div">
-                {packageData.packagename}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {packageData.description}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Duration: {packageData.packageduration} days
-              </Typography>
-            </CardContent>
-            <Box
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
+                position: "relative",
                 display: "flex",
-                gap: 1,
+                flexDirection: "column",
+                height: "400px",
               }}
             >
-              <IconButton
-                color="primary"
-                onClick={() => handleEdit(packageData)}
+              <CardMedia
+                component="img"
+                image={packageData.destinationimageurl}
+                alt={packageData.packagename}
+                sx={{
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+              />
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {packageData.packagename}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="h-1/3 text-nowrap"
+                >
+                  {packageData.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Duration: {packageData.packageduration} days
+                </Typography>
+              </CardContent>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 8,
+                  right: 8,
+                  display: "flex",
+                  gap: 1,
+                }}
               >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                color="error"
-                onClick={() => handleDelete(packageData)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Card>
-        ))}
-      </Box>
+                <IconButton
+                  color="primary"
+                  onClick={() => handleEdit(packageData)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  onClick={() => handleDelete(packageData)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Card>
+          ))}
+        </Box>
+      )}
       {/* Dialogs for editing and deleting */}
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogTitle>Edit Package</DialogTitle>

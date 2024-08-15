@@ -115,7 +115,24 @@ const CreatePackages = () => {
                 draggable={true}
                 theme="colored"
             />
-            {loading ? <CircularProgress size={24} /> :
+            {loading && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 9999,
+                    }}
+                >
+                    <CircularProgress size={60} />
+                </Box>
+            )}
             <Box component="form" onSubmit={handleSubmit} sx={{ p: 2, border: '1px solid black', width: '50vw', margin: '5vh auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography variant="h4" gutterBottom>Create Package</Typography>
 
@@ -190,7 +207,7 @@ const CreatePackages = () => {
                 <Button type="submit" variant="contained" sx={{ m: 2, p: 1, px: 4 }} disabled={loading}>
                      Add
                 </Button>
-            </Box> }
+            </Box>
         </>
     );
 };
