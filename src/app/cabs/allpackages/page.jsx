@@ -51,72 +51,72 @@ const packages = [
     description: 'Relax on a luxury cruise with our special package.',
     image: '/images/Sonamarg_image.jpg',
   },
-       
+
 ];
 
 const AllPackages = () => {
-    return (
-        <>
-          <Typography 
-           variant='h4'
-            className="mt-20 mb-6 w-screen text-3xl text-center"
+  return (
+    <>
+      <Typography
+        variant='h4'
+        className="mt-20 mb-6 w-screen text-3xl text-center"
+      >
+        Popular destinations
+      </Typography>
+      <Grid container spacing={6}
+        sx={{
+          width: '90vw',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 'auto'
+        }}
+      >
+        {packages.map((pkg) => (
+          <Grid item key={pkg.id} lg={3} md={4} sm={6} xs={12}>
+            <Card
+              sx={{
+                border: '1px solid #ccc',
+                borderRadius: '8px',
+                transition: 'transform 0.3s, box-shadow 0.3s',
+                '&:hover': {
+                  transform: 'scale(1.03)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                },
+              }}
             >
-             Popular destinations
-          </Typography>
-          <Grid container spacing={6} 
-          sx={{
-            width:'90vw',
-            justifyContent:'center',
-            alignItems:'center',
-            margin:'auto'
-          }}
-          >
-            {packages.map((pkg) => (
-              <Grid item key={pkg.id} lg={3} md={4} sm={6} xs={12}>
-                <Card
+              <CardMedia
+                component="img"
+                height="110"
+                image={pkg.image}
+                alt={pkg.title}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {pkg.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {pkg.description}
+                </Typography>
+                <Box
                   sx={{
-                    border: '1px solid #ccc',
-                    borderRadius: '8px',
-                    transition: 'transform 0.3s, box-shadow 0.3s',
-                    '&:hover': {
-                      transform: 'scale(1.03)',
-                      boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
-                    },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mt: 2,
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    height="110"
-                    image={pkg.image}
-                    alt={pkg.title}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {pkg.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {pkg.description}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        mt: 2,
-                      }}
-                    >
-                      <Button variant="contained" size="small" className="py-2 mt-4">
-                        Book
-                      </Button>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-            
+                  <Button variant="contained" size="small" className="py-2 mt-4">
+                    Book
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
           </Grid>
-      
-        </>
-      );
+        ))}
+
+      </Grid>
+
+    </>
+  );
 }
 
 export default AllPackages

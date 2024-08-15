@@ -105,10 +105,11 @@ const Page = () => {
               </CardContent>
             </Card>
           </Grid>
-          {PDbookings.length > 0 ? <BookingComponent PDbookings={PDbookings} /> :
-           <NoBookings/>
-           
-           }
+          {PDbookings.length > 0 ? (
+            <BookingComponent PDbookings={PDbookings} />
+          ) : (
+            <NoBookings />
+          )}
         </Grid>
       )}
     </Box>

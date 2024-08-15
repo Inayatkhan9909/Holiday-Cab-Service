@@ -150,15 +150,19 @@ const Packages = () => {
               position: "relative",
               display: "flex",
               flexDirection: "column",
-              height: "100%",
+              height: "400px", // Fixed height for the card
             }}
           >
             <CardMedia
               component="img"
               image={packageData.destinationimageurl}
               alt={packageData.packagename}
+              sx={{
+                height: "200px", // Fixed height for the image
+                objectFit: "cover", // Ensure the image covers the area
+              }}
             />
-            <CardContent>
+            <CardContent sx={{ flexGrow: 1 }}>
               <Typography gutterBottom variant="h5" component="div">
                 {packageData.packagename}
               </Typography>

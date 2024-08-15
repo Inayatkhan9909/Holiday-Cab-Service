@@ -4,17 +4,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from "react-toastify";
 
 const CreatePackages = () => {
     const [image, setImage] = useState(null);
     const [prices, setPrices] = useState({
-        "Swift dzire": "",
+        "Swift Dzire": "",
         "Honda Amaze": "",
         "Crysta": "",
         "Innova": "",
@@ -29,6 +26,7 @@ const CreatePackages = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleChange = (e) => {
@@ -74,6 +72,7 @@ const CreatePackages = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
+        setLoading(true);
         try {
             const finalFormData = {
                 ...formData,
@@ -99,6 +98,8 @@ const CreatePackages = () => {
         } catch (error) {
             console.error(error);
             toast.error("Server Error");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -114,6 +115,7 @@ const CreatePackages = () => {
                 draggable={true}
                 theme="colored"
             />
+            {loading ? <CircularProgress size={24} /> :
             <Box component="form" onSubmit={handleSubmit} sx={{ p: 2, border: '1px solid black', width: '50vw', margin: '5vh auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography variant="h4" gutterBottom>Create Package</Typography>
 
@@ -185,8 +187,10 @@ const CreatePackages = () => {
                     sx={{ m: 1, minWidth: "80%" }}
                 />
 
-                <Button type="submit" variant="contained" sx={{ m: 2, p: 1, px: 4 }}>Add</Button>
-            </Box>
+                <Button type="submit" variant="contained" sx={{ m: 2, p: 1, px: 4 }} disabled={loading}>
+                     Add
+                </Button>
+            </Box> }
         </>
     );
 };
