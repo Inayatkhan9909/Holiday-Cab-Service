@@ -9,7 +9,6 @@ const Getpackages = async (req, res) => {
 
   try {
     await ConnectDb();
-        console.log("da raghlam")
     const packages = await Package.find({});
     res.status(200).json(packages);
   } catch (error) {

@@ -8,24 +8,37 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import { fetchgetPackage, selectGetPackage } from "../../features/packages/getPackageSlice";
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  fetchgetPackage,
+  selectGetPackage,
+} from "../../features/packages/getPackageSlice";
+import Link from "next/link";
 
 const AllPackages = () => {
   const dispatch = useDispatch();
   const { items: packages, loading, error } = useSelector(selectGetPackage);
   const [expanded, setExpanded] = useState({});
 
-  useEffect(() => {  
-    dispatch(fetchgetPackage())
+  useEffect(() => {
+    dispatch(fetchgetPackage());
   }, [dispatch]);
 
   const handleReadMore = (id) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-
   if (loading) {
-    return <Typography>Loading...</Typography>;
-  }
+    <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+    }}
+  >
+    <CircularProgress />
+  </Box>
+  };
 
   if (error) {
     return <Typography>Error loading packages</Typography>;
@@ -39,6 +52,7 @@ const AllPackages = () => {
       >
         Popular destinations
       </Typography>
+
       <Grid
         container
         spacing={6}
@@ -64,10 +78,12 @@ const AllPackages = () => {
             >
               <CardMedia
                 component="img"
-                height="200"
                 image={pkg.destinationimageurl}
                 alt={pkg.packagename}
-                sx={{ objectFit: "cover" }}
+                sx={{
+                  height: "200px",
+                  objectFit: "cover",
+                }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -77,6 +93,13 @@ const AllPackages = () => {
                   {expanded[pkg._id]
                     ? pkg.description
                     : `${pkg.description.substring(0, 100)}...`}
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => handleReadMore(pkg._id)}
+                  >
+                    {expanded[pkg._id] ? "Read Less" : "Read More"}
+                  </Button>
                 </Typography>
                 <Box
                   sx={{
@@ -85,13 +108,15 @@ const AllPackages = () => {
                     mt: 2,
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className="py-2 mt-4"
-                  >
-                    Book
-                  </Button>
+                  <Link href={`/cabs/allpackages/packageid=${pkg._id}`}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      className="py-2 mt-4"
+                    >
+                      Book
+                    </Button>
+                  </Link>
                 </Box>
                 <Box
                   sx={{
@@ -99,15 +124,7 @@ const AllPackages = () => {
                     justifyContent: "center",
                     mt: 2,
                   }}
-                >
-                  <Button
-                    variant="text"
-                    size="small"
-                    onClick={() => handleReadMore(pkg._id)}
-                  >
-                    {expanded[pkg._id] ? "Read Less" : "Read More"}
-                  </Button>
-                </Box>
+                ></Box>
               </CardContent>
             </Card>
           </Grid>

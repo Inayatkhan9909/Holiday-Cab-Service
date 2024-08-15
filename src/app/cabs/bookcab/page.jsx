@@ -66,9 +66,7 @@ const BookCab = () => {
         setFormData((prevData) => ({ ...prevData, pickup, drop, triptype }));
         fetchPrice(pickup, drop, formData.cabtype, triptype);
         dispatch(fetchUser());
-       
-             
-        
+           
     }, [dispatch]);
 
     useEffect(() => {
