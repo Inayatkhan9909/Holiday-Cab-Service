@@ -1,19 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
+  useDisclosure,
+} from "@nextui-org/react";
+import { IconButton } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
-
+import PackageBookingComponent from "@/app/components/PackageBookingComponent";
 
 const PackageDetails = ({ params }) => {
   const [packageDetails, setPackageDetails] = useState({});
-  const [confirmDialog, setConfirmDialog] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,39 +26,37 @@ const PackageDetails = ({ params }) => {
     cabType: "",
   });
   const [errors, setErrors] = useState({});
-  
 
   useEffect(() => {
-
     fetchPackageDetails();
   }, [params.packageid]);
 
   const fetchPackageDetails = async () => {
-  try {
-    console.log(params.packageid);
-    const queryString = decodeURIComponent(params.packageid);
-    const packageId = queryString.split('=')[1];
-    console.log(packageId);
-    const response = await fetch(`/api/cab/packages/GetPackagebyId?packageId=${packageId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      console.log(params.packageid);
+      const queryString = decodeURIComponent(params.packageid);
+      const packageId = queryString.split("=")[1];
+      console.log(packageId);
+      const response = await fetch(
+        `/api/cab/packages/GetPackagebyId?packageId=${packageId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setPackageDetails(data);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching package details:", error);
     }
-    const data = await response.json();
-    setPackageDetails(data);
-    console.log(data);
-  } catch (error) {
-    console.error("Error fetching package details:", error);
-  }
-};
-
-
-
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,7 +78,7 @@ const PackageDetails = ({ params }) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form data submitted:", formData);
-      setConfirmDialog(true);
+      onOpen();
     }
   };
 
@@ -109,11 +109,13 @@ const PackageDetails = ({ params }) => {
       <div className="max-w-lg mx-auto p-6 my-10 bg-white rounded-lg shadow-md border border-black">
         <div className="mb-6 text-center">
           <h2 className="text-2xl md:text-3xl font-semibold mb-2">
-            Package Details  
+            Package Details
           </h2>
         </div>
         <div className="mb-6 border p-4 rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">{packageDetails.packagename}</h3>
+          <h3 className="text-xl font-semibold mb-2">
+            {packageDetails.packagename}
+          </h3>
           <p className="mb-4">{packageDetails.description}</p>
           <img
             src={packageDetails.destinationimageurl}
@@ -276,26 +278,39 @@ const PackageDetails = ({ params }) => {
               type="submit"
               className="px-6 py-3 mb-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              Submit
+              Book
             </button>
           </div>
         </form>
       </div>
 
-      <Dialog open={confirmDialog} onClose={() => setConfirmDialog(false)}>
-        <DialogTitle>Confirm Booking</DialogTitle>
-        <DialogContent>
-          <p>Are you sure you want to submit the form?</p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => setConfirmDialog(false)} color="primary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Confirm Booking
+              </ModalHeader>
+              <ModalBody>
+                <PackageBookingComponent formData={formData} />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
