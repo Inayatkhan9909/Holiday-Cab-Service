@@ -1,21 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
-} from "@nextui-org/react";
-import { IconButton } from "@mui/material";
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import PackageBookingComponent from "@/app/components/PackageBookingComponent";
 
 const PackageDetails = ({ params }) => {
   const [packageDetails, setPackageDetails] = useState({});
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -78,8 +76,17 @@ const PackageDetails = ({ params }) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form data submitted:", formData);
-      onOpen();
+      setconfirmbookDialoge(true);
     }
+  };
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setconfirmbookDialoge(false);
+  
   };
 
   const fetchCurrentLocation = () => {
@@ -272,8 +279,8 @@ const PackageDetails = ({ params }) => {
                   Cab Type
                 </label>
                 <select
-                  id="cabType" // Ensure this matches the key in formData
-                  name="cabType" // Ensure this matches the key in formData
+                  id="cabType" 
+                  name="cabType" 
                   value={formData.cabType}
                   onChange={handleChange}
                   className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -300,50 +307,20 @@ const PackageDetails = ({ params }) => {
             </div>
           </form>
           
-          <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        className=" flex items-center justify-center w-full max-w-xl h-3/4 m-auto p-4 relative bg-white rounded-lg shadow-lg"
-      >
-        <ModalContent className="w-full">
-          {(onClose) => (
-            <>
-           
-           <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
-             
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+          <Dialog open={confirmbookDialoge} onClose={handledialogClose}>
+          <DialogTitle>Confirm Booking</DialogTitle>
+          <DialogContent>
+            <PackageBookingComponent formData={formData} />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setconfirmbookDialoge(false)}
+              color="primary"
+            >
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
         </div>
       </div>
 

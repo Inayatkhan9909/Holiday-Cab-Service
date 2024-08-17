@@ -24,7 +24,6 @@ const BookCab = () => {
   const user = useSelector(selectUser);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-
   const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
   const [contactDialoge, setcontactDialoge] = useState(false);
   const [searchParams, setSearchParams] = useState({
@@ -175,6 +174,7 @@ const BookCab = () => {
     }
     console.log("reason empty");
     setconfirmbookDialoge(false);
+    setcontactDialoge(false);
   };
 
   const fetchCurrentLocation = () => {
@@ -481,7 +481,7 @@ const BookCab = () => {
           </DialogActions>
         </Dialog>
 
-        <Dialog open={contactDialoge} onClose={() => setcontactDialoge(false)}>
+        <Dialog open={contactDialoge} onClose={handledialogClose}>
           <DialogTitle>Contact Us</DialogTitle>
           <DialogContent>
             <Contact />
