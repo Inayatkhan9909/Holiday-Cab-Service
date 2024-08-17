@@ -28,7 +28,11 @@ const Packages = () => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Typography className="mt-20 mb-6 w-screen text-3xl text-center">
+        <CircularProgress />
+      </Typography>
+    );
   }
   const displayedPackages = packages.slice(0, 3);
 

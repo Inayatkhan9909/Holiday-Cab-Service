@@ -105,213 +105,250 @@ const PackageDetails = ({ params }) => {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="max-w-lg mx-auto p-6 my-10 bg-white rounded-lg shadow-md border border-black">
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-2">
-            Package Details
-          </h2>
-        </div>
-        <div className="mb-6 border p-4 rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">
-            {packageDetails.packagename}
-          </h3>
-          <p className="mb-4">{packageDetails.description}</p>
-          <img
-            src={packageDetails.destinationimageurl}
-            alt={packageDetails.packagename}
-            className="w-full h-auto mb-4"
-          />
-          <p className="text-lg font-semibold">
-            Price: ${packageDetails.price}
-          </p>
-        </div>
-        <form onSubmit={handleSubmit} className="">
-          <div className="grid grid-cols-1 gap-6 mb-6">
-            <div className="form-control">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.name && (
-                <p className="mt-2 text-sm text-red-600">{errors.name}</p>
-              )}
-            </div>
-            <div className="form-control">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
-            <div className="form-control">
-              <label
-                htmlFor="contactNo"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Contact No
-              </label>
-              <input
-                id="contactNo"
-                name="contactNo"
-                type="text"
-                value={formData.contactNo}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.contactNo && (
-                <p className="mt-2 text-sm text-red-600">{errors.contactNo}</p>
-              )}
-            </div>
-            <div className="form-control relative">
-              <label
-                htmlFor="pickupFullAddress"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Pickup Full Address
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="pickupFullAddress"
-                  name="pickupFullAddress"
-                  type="text"
-                  value={formData.pickupFullAddress}
-                  onChange={handleChange}
-                  className="flex-grow mt-1 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-                <IconButton
-                  aria-label="fetch location"
-                  className="ml-2"
-                  onClick={fetchCurrentLocation}
-                >
-                  <MyLocationIcon />
-                </IconButton>
-              </div>
-              {errors.pickupFullAddress && (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.pickupFullAddress}
-                </p>
-              )}
-            </div>
-            <div className="form-control">
-              <label
-                htmlFor="date"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Date
-              </label>
-              <input
-                id="date"
-                name="date"
-                type="date"
-                value={formData.date}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.date && (
-                <p className="mt-2 text-sm text-red-600">{errors.date}</p>
-              )}
-            </div>
-            <div className="form-control">
-              <label
-                htmlFor="time"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Time
-              </label>
-              <input
-                id="time"
-                name="time"
-                type="time"
-                value={formData.time}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.time && (
-                <p className="mt-2 text-sm text-red-600">{errors.time}</p>
-              )}
-            </div>
-            <div className="form-control">
-              <label
-                htmlFor="cabType"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Cab Type
-              </label>
-              <input
-                id="cabType"
-                name="cabType"
-                type="text"
-                value={formData.cabType}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              {errors.cabType && (
-                <p className="mt-2 text-sm text-red-600">{errors.cabType}</p>
-              )}
-            </div>
+    <>
+      <div className="container mx-auto px-4">
+        <div className="max-w-5xl mx-9 p-6 my-10 bg-white rounded-lg shadow-md border border-black">
+          <div className="mb-6 text-center">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-2">
+              Package Details
+            </h2>
           </div>
-          <div className="flex flex-col items-center">
-            <button
-              type="submit"
-              className="px-6 py-3 mb-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Book
-            </button>
-          </div>
-        </form>
-      </div>
 
-      <Modal
+          <div className=" w-full  flex mb-6 border p-4 rounded-lg">
+            <div className=" p-5">
+              <img
+                src={packageDetails.destinationimageurl}
+                alt={packageDetails.packagename}
+                className="max-w-sm  mb-4 object-contain"
+              />
+            </div>
+
+            <div className="">
+              <h3 className="text-xl font-semibold mb-2">
+                {packageDetails.packagename}
+              </h3>
+              <p className="mb-4">{packageDetails.description}</p>
+
+              <p className="text-lg font-semibold">
+                Price: ${packageDetails.price}
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="w-9/12 m-auto">
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="form-control">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.name && (
+                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="contactNo"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Contact No
+                </label>
+                <input
+                  id="contactNo"
+                  name="contactNo"
+                  type="text"
+                  value={formData.contactNo}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.contactNo && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.contactNo}
+                  </p>
+                )}
+              </div>
+              <div className="form-control relative">
+                <label
+                  htmlFor="pickupFullAddress"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Pickup Full Address
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="pickupFullAddress"
+                    name="pickupFullAddress"
+                    type="text"
+                    value={formData.pickupFullAddress}
+                    onChange={handleChange}
+                    className="flex-grow mt-1 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  />
+                  <IconButton
+                    aria-label="fetch location"
+                    className="ml-2"
+                    onClick={fetchCurrentLocation}
+                  >
+                    <MyLocationIcon />
+                  </IconButton>
+                </div>
+                {errors.pickupFullAddress && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.pickupFullAddress}
+                  </p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="date"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Date
+                </label>
+                <input
+                  id="date"
+                  name="date"
+                  type="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.date && (
+                  <p className="mt-2 text-sm text-red-600">{errors.date}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="time"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Time
+                </label>
+                <input
+                  id="time"
+                  name="time"
+                  type="time"
+                  value={formData.time}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.time && (
+                  <p className="mt-2 text-sm text-red-600">{errors.time}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="cabType"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Cab Type
+                </label>
+                <select
+                  id="cabType" // Ensure this matches the key in formData
+                  name="cabType" // Ensure this matches the key in formData
+                  value={formData.cabType}
+                  onChange={handleChange}
+                  className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+                  <option value="">Select Cab Type</option>
+                  <option value="Swift dzire">Swift dzire</option>
+                  <option value="Honda Amaze">Honda Amaze</option>
+                  <option value="Crysta">Crysta</option>
+                  <option value="Innova">Innova</option>
+                  <option value="Traveler">Traveler</option>
+                </select>
+                {errors.cabType && (
+                  <p className="mt-2 text-sm text-red-600">{errors.cabType}</p>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <button
+                type="submit"
+                className="px-6 py-3 mb-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Book
+              </button>
+            </div>
+          </form>
+          
+          <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
+        className=" flex items-center justify-center w-full max-w-xl h-3/4 m-auto p-4 relative bg-white rounded-lg shadow-lg"
       >
-        <ModalContent>
+        <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Confirm Booking
-              </ModalHeader>
+           
+           <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
               <ModalBody>
-                <PackageBookingComponent formData={formData} />
+                <p> 
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
+                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
+                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
+                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
+                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
+                </p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
                 <Button color="primary" onPress={onClose}>
-                  Confirm
+                  Action
                 </Button>
               </ModalFooter>
+             
             </>
           )}
         </ModalContent>
       </Modal>
-    </div>
+        </div>
+      </div>
+
+      
+    </>
   );
 };
 

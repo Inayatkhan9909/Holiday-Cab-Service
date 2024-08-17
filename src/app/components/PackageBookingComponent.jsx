@@ -27,7 +27,8 @@ const PackageBookingComponent = ({ formData }) => {
 
   return (
     <>
-      <h1>Confirm Booking</h1>
+     <div className="">
+     <h1>Confirm Booking</h1>
       <div>
         <p>Are you sure you want to submit the form?</p>
         <div className="space-y-2">
@@ -69,6 +70,7 @@ const PackageBookingComponent = ({ formData }) => {
           {loading ? "Submitting..." : "Confirm"}
         </button>
       </div>
+     </div>
     </>
   );
 };
