@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,31 +10,42 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
-  fetchgetPackage,
-  selectGetPackage,
-} from "../features/packages/getPackageSlice";
+  fetchgetcabtypes,
+  selectgetCabtypes,
+} from "../../features/cabtypes/getCabtypesSlice";
+import Link from "next/link";
 
-const Packages = () => {
+const AllPackages = () => {
   const dispatch = useDispatch();
-  const { items: packages, loading, error } = useSelector(selectGetPackage);
+  const { items: cabs, loading, error } = useSelector(selectgetCabtypes);
   const [expanded, setExpanded] = useState({});
 
   useEffect(() => {
-    dispatch(fetchgetPackage());
+    dispatch(fetchgetcabtypes());
   }, [dispatch]);
 
   const handleReadMore = (id) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
   if (loading) {
     return (
-      <Typography className="mt-20 mb-6 w-screen text-3xl text-center">
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <CircularProgress />
-      </Typography>
+      </Box>
     );
   }
- 
-  const displayedPackages = packages.slice(0, 3);
+
+  if (error) {
+    return <Typography>Error loading packages</Typography>;
+  }
 
   return (
     <>
@@ -45,17 +55,18 @@ const Packages = () => {
       >
         Popular destinations
       </Typography>
+
       <Grid
         container
         spacing={6}
         sx={{
           width: "90vw",
-          justifyContent: "center",
           alignItems: "center",
+          margin: "auto",
         }}
       >
-        {packages && displayedPackages.map((pkg) => (
-          <Grid item key={pkg.id} lg={3} md={4} sm={6} xs={12}>
+        {cabs.map((cab) => (
+          <Grid item key={cab._id} lg={3} md={4} sm={6} xs={12}>
             <Card
               sx={{
                 border: "1px solid #ccc",
@@ -65,16 +76,12 @@ const Packages = () => {
                   transform: "scale(1.03)",
                   boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
                 },
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
               }}
             >
               <CardMedia
                 component="img"
-                image={pkg.destinationimageurl}
-                alt={pkg.title}
+                image={cab.cabimageurl}
+                alt={cab.cabname}
                 sx={{
                   height: "200px",
                   objectFit: "cover",
@@ -82,19 +89,25 @@ const Packages = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  {pkg.title}
+                  {cab.cabname}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {expanded[pkg._id]
-                    ? pkg.description
-                    : `${pkg.description.substring(0, 100)}...`}
+                  {expanded[cab._id]
+                    ? cab.description
+                    : `${cab.description.substring(0, 100)}...`}
                   <Button
                     variant="text"
                     size="small"
-                    onClick={() => handleReadMore(pkg._id)}
+                    onClick={() => handleReadMore(cab._id)}
                   >
-                    {expanded[pkg._id] ? "Read Less" : "Read More"}
+                    {expanded[cab._id] ? "Read Less" : "Read More"}
                   </Button>
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Max Persons: {cab.maxpersons}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price: ${cab.price}
                 </Typography>
                 <Box
                   sx={{
@@ -103,7 +116,7 @@ const Packages = () => {
                     mt: 2,
                   }}
                 >
-                  <Link href={`/cabs/allpackages/packageid=${pkg._id}`}>
+                  <Link href={`/cabs/cabtypes/cabtypeid=${cab._id}`}>
                     <Button
                       variant="contained"
                       size="small"
@@ -117,37 +130,9 @@ const Packages = () => {
             </Card>
           </Grid>
         ))}
-        <Grid item lg={3} md={4} sm={6} xs={12}>
-          <Card
-            sx={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              "&:hover": {
-                transform: "scale(1.03)",
-                boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-              },
-            }}
-          >
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography variant="body1" color="text.secondary">
-                Explore all the famous and beautyfull destinations with us and
-                book your trip now
-              </Typography>
-              <Link href="/cabs/allpackages" passHref>
-                <Button variant="outlined" size="large" className="mt-10">
-                  All Packages
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </Grid>
       </Grid>
     </>
   );
 };
 
-export default Packages;
+export default AllPackages;

@@ -22,7 +22,7 @@ const Adminpage = () => {
               <Typography variant="h5" gutterBottom>
                 Pick & Drop cabs
               </Typography>
-           
+
               <Button
                 variant="contained"
                 color="primary"
@@ -41,7 +41,7 @@ const Adminpage = () => {
                 View bookings
               </Typography>
               <Typography variant="body2">
-             View all the bookings done in pick and drop
+                View all the bookings done in pick and drop
               </Typography>
               <Button
                 variant="contained"
@@ -49,11 +49,12 @@ const Adminpage = () => {
                 sx={{ mt: 2 }}
                 onClick={() => handleNavigation('/admin/packages')}
               >
-               Bookings
+                Bookings
               </Button>
             </CardContent>
           </Card>
         </Grid>
+
         <Grid item xs={12} md={6} lg={4}>
           <Card>
             <CardContent>
@@ -74,7 +75,28 @@ const Adminpage = () => {
             </CardContent>
           </Card>
         </Grid>
-        {/* Add more sections as needed */}
+
+        <Grid item xs={12} md={6} lg={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+              Cab type
+              </Typography>
+              <Typography variant="body2">
+                Click to creat/edit the Cab type.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={() => handleNavigation('/admin/cabtypesadmin')}
+              >
+                Cabe types
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
       </Grid>
     </Box>
   );

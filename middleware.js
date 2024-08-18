@@ -34,6 +34,11 @@ export async function middleware(request) {
     loginUrl.searchParams.set('redirectTo', path)
     return NextResponse.redirect(loginUrl);
   }
+  if (!isAuthenticated && path === '/cabs/allpackages/[packageid]') {
+    const loginUrl = new URL('/user/login', request.url)
+    loginUrl.searchParams.set('redirectTo', path)
+    return NextResponse.redirect(loginUrl);
+  }
 
   const publicpath = path === '/user/login' || path === '/user/signup'
   if (isAuthenticated && publicpath) {
