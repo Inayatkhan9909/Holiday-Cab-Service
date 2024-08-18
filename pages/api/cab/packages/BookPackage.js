@@ -1,12 +1,11 @@
 import errorHandler from "../../../../utils/Features";
 import ConnectDb from "../../../../utils/DbConnect";
-import BookPackage from "../../../../Models/BookPackageModel";
+import BookPackageModel from "../../../../Models/BookPackageModel";
 
 const BookPackage = async (req, res) => {
     if (req.method !== "POST") {
         return errorHandler(res, 400, "Only GET Method is allowed");
     }
-
 
 
     const { packagename, pickup, customername, email, pickupfulladdress, contact, price, persons, packageduration, pickuptime, pickupdate } = req.body;
@@ -16,7 +15,7 @@ const BookPackage = async (req, res) => {
     }
     try {
         await ConnectDb();
-        const newPackage = new BookPackage({
+        const newPackage = new BookPackageModel({
             packagename,
             pickup,
             customername,

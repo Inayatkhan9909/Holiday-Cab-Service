@@ -57,6 +57,6 @@ const BookPackageSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-const BookPackage = mongoose.models.BookPackage || mongoose.model("BookPackage", BookPackageSchema);
+const BookPackageModel = mongoose.models.BookPackageModel || mongoose.model("BookPackageModel", BookPackageSchema);
 
-export default BookPackage;
+export default BookPackageModel;
