@@ -13,7 +13,7 @@ const PackageBookingComponent = ({ formData }) => {
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
-  const handleSubmit = async () => {
+  const handleBookandContactoffice = async () => {
     setLoading(true);
     try {
       const response = await axios.post("/api/submitBooking", formData);
@@ -24,15 +24,24 @@ const PackageBookingComponent = ({ formData }) => {
       setLoading(false);
     }
   };
+  const  handlePayNow = async () => {
+    setLoading(true);
+    try {
+     
+      setResponseMessage("Payment option is currently not avaliable");
+    } catch (error) {
+      setResponseMessage("Failed to confirm booking. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
-      <div className="">
-        <h1>Confirm Booking</h1>
-        <div>
-          <p>Are you sure you want to submit the form?</p>
-          <div className="space-y-2">
-            <p>
+    <div className="p-6">
+                <h2 className="text-2xl font-semibold mb-4">Confirm Your Booking</h2>
+                <div className="mb-4">
+                <p>
               <strong>Name:</strong> {formData.name}
             </p>
             <p>
@@ -53,8 +62,9 @@ const PackageBookingComponent = ({ formData }) => {
             <p>
               <strong>Cab Type:</strong> {formData.cabType}
             </p>
-          </div>
-          {responseMessage && (
+
+                </div>
+                {responseMessage && (
             <div
               className={`mt-4 p-2 text-center ${
                 responseMessage.includes("successfully")
@@ -65,15 +75,22 @@ const PackageBookingComponent = ({ formData }) => {
               {responseMessage}
             </div>
           )}
-
-          <button
-            className="md:px-6 md:py-3 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 m-auto"
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Confirm"}
-          </button>
-        </div>
-      </div>
+                <p className="mb-6 text-gray-600">Note: Your booking will be confirmed within 5 minutes.</p>
+                <div className="flex justify-between gap-2">
+                    <button
+                        onClick={handlePayNow}
+                        className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    >
+                      Pay Now  
+                    </button>
+                    <button
+                         onClick={handleBookandContactoffice}
+                        className="md:px-6 md:py-3 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
+                       Book & Pay later
+                    </button>
+                </div>
+            </div>
     </>
   );
 };
