@@ -79,6 +79,7 @@ const PackageDetails = ({ params }) => {
       setconfirmbookDialoge(true);
     }
   };
+
   const handledialogClose = (event, reason) => {
     if ((reason && reason === "backdropClick") || "escapeKeyDown") {
       console.log("backdropClicked. Not closing dialog.");
@@ -86,7 +87,6 @@ const PackageDetails = ({ params }) => {
     }
     console.log("reason empty");
     setconfirmbookDialoge(false);
-  
   };
 
   const fetchCurrentLocation = () => {
@@ -114,23 +114,23 @@ const PackageDetails = ({ params }) => {
   return (
     <>
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-9 p-6 my-10 bg-white rounded-lg shadow-md border border-black">
+        <div className="max-w-5xl mx-auto p-6 my-10 bg-white rounded-lg shadow-md border border-black">
           <div className="mb-6 text-center">
             <h2 className="text-2xl md:text-3xl font-semibold mb-2">
               Package Details
             </h2>
           </div>
 
-          <div className=" w-full  flex mb-6 border p-4 rounded-lg">
-            <div className=" p-5">
+          <div className="w-full flex flex-col md:flex-row mb-6 border p-4 rounded-lg">
+            <div className="p-5 flex justify-center md:justify-start">
               <img
                 src={packageDetails.destinationimageurl}
                 alt={packageDetails.packagename}
-                className="max-w-sm  mb-4 object-contain"
+                className="max-w-full md:max-w-sm mb-4 object-contain"
               />
             </div>
 
-            <div className="">
+            <div className="md:ml-6">
               <h3 className="text-xl font-semibold mb-2">
                 {packageDetails.packagename}
               </h3>
@@ -142,8 +142,8 @@ const PackageDetails = ({ params }) => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="w-9/12 m-auto">
-            <div className="grid grid-cols-2 gap-6 mb-6">
+          <form onSubmit={handleSubmit} className="w-full md:w-9/12 m-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="form-control">
                 <label
                   htmlFor="name"
@@ -279,11 +279,11 @@ const PackageDetails = ({ params }) => {
                   Cab Type
                 </label>
                 <select
-                  id="cabType" 
-                  name="cabType" 
+                  id="cabType"
+                  name="cabType"
                   value={formData.cabType}
                   onChange={handleChange}
-                  className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 >
                   <option value="">Select Cab Type</option>
                   <option value="Swift dzire">Swift dzire</option>
@@ -306,25 +306,23 @@ const PackageDetails = ({ params }) => {
               </button>
             </div>
           </form>
-          
+
           <Dialog open={confirmbookDialoge} onClose={handledialogClose}>
-          <DialogTitle>Confirm Booking</DialogTitle>
-          <DialogContent>
-            <PackageBookingComponent formData={formData} />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => setconfirmbookDialoge(false)}
-              color="primary"
-            >
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <DialogTitle>Confirm Booking</DialogTitle>
+            <DialogContent>
+              <PackageBookingComponent formData={formData} />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setconfirmbookDialoge(false)}
+                color="primary"
+              >
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
-
-      
     </>
   );
 };
