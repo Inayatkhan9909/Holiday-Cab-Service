@@ -48,6 +48,15 @@ const ForgotPassword = () => {
     }
   };
 
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setloadDialog(false);
+  };
+
   return (
     <Container maxWidth="sm">
       <Box m={'auto'} mt={12} width={'50%'}>
@@ -74,7 +83,7 @@ const ForgotPassword = () => {
         </form>
       </Box>
 
-      <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+      <Dialog open={loadDialog} onClose={handledialogClose}
         style={{ backgroundColor: 'transparent' }}
         overlayStyle={{ backgroundColor: 'transparent' }}
         title='Loading'

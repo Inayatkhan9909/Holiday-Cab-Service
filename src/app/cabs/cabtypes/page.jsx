@@ -53,7 +53,7 @@ const AllPackages = () => {
         variant="h4"
         className="mt-20 mb-6 w-screen text-3xl text-center"
       >
-        Popular destinations
+        All cabs avaliable
       </Typography>
 
       <Grid

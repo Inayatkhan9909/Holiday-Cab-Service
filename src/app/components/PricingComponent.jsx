@@ -1,4 +1,3 @@
-// components/PricingComponent.js
 import React from 'react';
 import {
   Box,
@@ -10,9 +9,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 
 const PricingComponent = () => {
   const prices = [
@@ -26,15 +23,33 @@ const PricingComponent = () => {
     { service: 'Mini Bus 27 seater', value: 8500 },
   ];
 
-
-
   return (
-    <Box className=" inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <Box className="relative w-full max-w-lg bg-white rounded-lg shadow-lg">
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={2} borderBottom="1px solid #e0e0e0">
+    <Box
+      className="inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}
+    >
+      <Box
+        className="relative w-full max-w-lg bg-white rounded-lg shadow-lg"
+        sx={{
+          width: '100%',
+          maxWidth: '600px',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 2,
+        }}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          p={2}
+          borderBottom="1px solid #e0e0e0"
+        >
           <Typography id="price-modal-title" variant="h6" component="h2">
             Kashmir Taxi Service Prices 2024
           </Typography>
+        
         </Box>
         <Box p={2}>
           <Typography variant="body1" component="p" gutterBottom>

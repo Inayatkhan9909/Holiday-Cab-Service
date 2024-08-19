@@ -70,6 +70,15 @@ export default function Login() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setLoadDialog(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -161,7 +170,7 @@ export default function Login() {
         </Box>
         <Dialog
           open={loadDialog}
-          onClose={() => setLoadDialog(false)}
+          onClose={handledialogClose}
           style={{ backgroundColor: 'transparent' }}
           overlayStyle={{ backgroundColor: 'transparent' }}
           title='Loading'

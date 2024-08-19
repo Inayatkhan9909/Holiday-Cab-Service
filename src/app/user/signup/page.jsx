@@ -43,7 +43,7 @@ export default function SignUp() {
       setErrors({ terms: "You must accept the privacy policy and terms & conditions" });
       return;
     } else {
-      setErrors({}); // Clear any previous errors
+      setErrors({});
     }
 
     try {
@@ -93,6 +93,15 @@ export default function SignUp() {
       form.elements[index + 1].focus();
       event.preventDefault();
     }
+  };
+
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setLoadDialog(false)
   };
 
   return (
@@ -258,7 +267,7 @@ export default function SignUp() {
           </Box>
           <Dialog
             open={loadDialog}
-            onClose={() => setLoadDialog(false)}
+            onClose={handledialogClose}
             style={{ backgroundColor: 'transparent' }}
             overlayStyle={{ backgroundColor: 'transparent' }}
             title="Loading"

@@ -76,6 +76,15 @@ const ResetPassword = () => {
     }
   };
 
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setloadDialog(false);
+  };
+
   return (
     <Box sx={{ maxWidth: 400, mx: 'auto', mt: 5, p: 3, boxShadow: 3, borderRadius: 2 }}>
       <Typography variant="h4" gutterBottom>
@@ -117,7 +126,7 @@ const ResetPassword = () => {
         </Button>
       </form>
 
-      <Dialog open={loadDialog} onClose={() => setloadDialog(false)}
+      <Dialog open={loadDialog} onClose={handledialogClose}
         style={{ backgroundColor: 'transparent' }}
         overlayStyle={{ backgroundColor: 'transparent' }}
         title='Loading'

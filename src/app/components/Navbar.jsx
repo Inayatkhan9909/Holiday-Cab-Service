@@ -95,6 +95,16 @@ function ResponsiveAppBar() {
     router.push('/cabs/allpackages');
   };
 
+  const handledialogClose = (event, reason) => {
+    if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+      console.log("backdropClicked. Not closing dialog.");
+      return;
+    }
+    console.log("reason empty");
+    setOpenContactDialog(false);
+    setOpenPricingDialog(false);
+  };
+
   return (
     <AppBar position="static">
       <ToastContainer
@@ -267,7 +277,7 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
 
-      <Dialog open={openContactDialog} onClose={() => setOpenContactDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog open={openContactDialog} onClose={handledialogClose} maxWidth="sm" fullWidth>
         <DialogTitle>Contact</DialogTitle>
         <DialogContent>
           <Contact />
@@ -277,7 +287,7 @@ function ResponsiveAppBar() {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openPricingDialog} onClose={() => setOpenPricingDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog open={openPricingDialog} onClose={handledialogClose} maxWidth="sm" fullWidth>
         <DialogTitle>Pricing</DialogTitle>
         <DialogContent>
           <PricingComponent />

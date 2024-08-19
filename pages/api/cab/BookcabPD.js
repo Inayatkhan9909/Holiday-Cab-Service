@@ -64,25 +64,25 @@ const Bookcab = async (req, res) => {
             return res.status(404).send({ message: 'Failed to send confirmation email. Please contact support.' });
         }
 
-        const smsBody = `
-        Cab Booking Confirmation:
-        Dear ${customername},
-        Your booking is confirmed!
-        Pickup: ${pickup}
-        Drop: ${drop}
-        Date: ${traveldate}
-        Time: ${traveltime}
-        Cab: ${cabtype}
-        Persons: ${persons}
-        To cancel, visit:
-        ${cancelBookingUrl}
+        // const smsBody = `
+        // Cab Booking Confirmation:
+        // Dear ${customername},
+        // Your booking is confirmed!
+        // Pickup: ${pickup}
+        // Drop: ${drop}
+        // Date: ${traveldate}
+        // Time: ${traveltime}
+        // Cab: ${cabtype}
+        // Persons: ${persons}
+        // To cancel, visit:
+        // ${cancelBookingUrl}
         
-        Thank you for choosing our service!
-                `.trim();
-        const sentSMS = await SendSMS(contact, smsBody);
-        if (!sentSMS) {
-            return res.status(404).send({ message: 'Failed to send confirmation SMS. Please check mobile .' });
-        }
+        // Thank you for choosing our service!
+        //         `.trim();
+        // const sentSMS = await SendSMS(contact, smsBody);
+        // if (!sentSMS) {
+        //     return res.status(404).send({ message: 'Failed to send confirmation SMS. Please check mobile .' });
+        // }
 
         return res.status(201).json({ message: "Cab booking successful", booking: bookcab });
 

@@ -49,6 +49,15 @@ const VerifyUser = () => {
         }
     };
 
+    const handledialogClose = (event, reason) => {
+        if ((reason && reason === "backdropClick") || "escapeKeyDown") {
+          console.log("backdropClicked. Not closing dialog.");
+          return;
+        }
+        console.log("reason empty");
+        setLoadDialog(false);
+      };
+
     return (
         <Container maxWidth="sm">
             <Box
@@ -97,7 +106,7 @@ const VerifyUser = () => {
                     Verify OTP
                 </Button>
             </Box>
-            <Dialog open={loadDialog} onClose={() => setLoadDialog(false)}
+            <Dialog open={loadDialog} onClose={handledialogClose}
                 style={{ backgroundColor: 'transparent' }}
                 overlayStyle={{ backgroundColor: 'transparent' }}
                 title='Loading'

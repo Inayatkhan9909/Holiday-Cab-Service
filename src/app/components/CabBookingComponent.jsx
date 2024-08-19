@@ -8,13 +8,14 @@ import {
   Button,
 } from "@nextui-org/react";
 
-const PackageBookingComponent = ({ formData }) => {
+const CabBookingComponent = ({ formData }) => {
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
   const handleBookandContactoffice = async () => {
     setLoading(true);
     try {
+     
       setResponseMessage("Booking is currently unavaliable");
     } catch (error) {
       setResponseMessage("Failed to confirm booking. Please try again.");
@@ -39,7 +40,7 @@ const PackageBookingComponent = ({ formData }) => {
         <h2 className="text-2xl font-semibold mb-4">Confirm Your Booking</h2>
         <div className="mb-4">
           <p>
-            <strong>Name:</strong> {formData.name}
+            <strong>Name:</strong> {formData.cabname}
           </p>
           <p>
             <strong>Email:</strong> {formData.email}
@@ -93,4 +94,4 @@ const PackageBookingComponent = ({ formData }) => {
   );
 };
 
-export default PackageBookingComponent;
+export default CabBookingComponent;
