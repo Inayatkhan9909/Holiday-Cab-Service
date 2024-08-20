@@ -11,7 +11,6 @@ const BookPackage = async (req, res) => {
     }
 
     const { packagename, pickup, customername, email, pickupfulladdress, contact, price, persons, packageduration, pickuptime, pickupdate } = req.body;
-console.log(req.body)
     if (!packagename || !pickup || !customername || !email || !pickupfulladdress || !contact || !price || !persons || !packageduration || !pickuptime || !pickupdate) {
         return errorHandler(res, 400, "All fields are required");
     }

@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useRouter } from 'next/navigation';
-import {  ToastContainer,toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const PickDrop = () => {
   const [formData, setFormData] = useState({
@@ -96,27 +96,55 @@ const PickDrop = () => {
           sx={{ m: 1, minWidth: "80%" }}
         />
 
-        <TextField
-          label="Pickup"
-          type="text"
-          name="pickup"
-          value={formData.pickup}
-          onChange={handleChange}
-          error={!!errors.pickup}
-          helperText={errors.pickup}
-          sx={{ m: 1, minWidth: "80%" }}
-        />
 
-        <TextField
-          label="Drop"
-          type="text"
-          name="drop"
-          value={formData.drop}
-          onChange={handleChange}
-          error={!!errors.drop}
-          helperText={errors.drop}
-          sx={{ m: 1, minWidth: "80%" }}
-        />
+        <FormControl fullWidth >
+          <InputLabel id="pickup_select">Pickup</InputLabel>
+          <Select
+            labelId="pickup_select"
+            id="pickup"
+            label="Pickup"
+            name="pickup"
+            value={formData.pickup}
+            onChange={handleChange}
+            error={!!errors.pickup}
+            helperText={errors.pickup}
+          >
+            <MenuItem value="Srinagar">Srinagar</MenuItem>
+            <MenuItem value="Jammu">Jammu</MenuItem>
+            <MenuItem value="Pahlagam">Pahlagam</MenuItem>
+            <MenuItem value="Gulmarg">Gulmarg</MenuItem>
+            <MenuItem value="Sonamarg">Sonamarg</MenuItem>
+            {/* <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem> */}
+          </Select>
+         
+        </FormControl>
+
+        <FormControl fullWidth >
+            <InputLabel id="drop_select">Drop</InputLabel>
+            <Select
+              labelId="drop_select"
+              id="drop"
+             name="drop"
+              label="Drop"
+              value={formData.drop}
+              onChange={handleChange}
+              error={!!errors.drop}
+              helperText={errors.drop}
+            
+            >
+              <MenuItem value="Srinagar">Srinagar</MenuItem>
+              <MenuItem value="Jammu">Jammu</MenuItem>
+              <MenuItem value="Pahlagam">Pahlagam</MenuItem>
+              <MenuItem value="Gulmarg">Gulmarg</MenuItem>
+              <MenuItem value="Sonamarg">Sonamarg</MenuItem>
+              {/* <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem> */}
+            </Select>
+          
+          </FormControl>
+
+  
 
         <TextField
           label="OneWay Fair"
@@ -152,10 +180,10 @@ const PickDrop = () => {
             sx={{ mt: 1 }}
           >
             <MenuItem value="Swift dzire">Swift dzire</MenuItem>
-            <MenuItem value="Honda Amaze">Honda Amaze</MenuItem>
+            {/* <MenuItem value="Honda Amaze">Honda Amaze</MenuItem> */}
             <MenuItem value="Crysta">Crysta</MenuItem>
             <MenuItem value="Innova">Innova</MenuItem>
-            <MenuItem value="Traveler">Traveler</MenuItem>
+            {/* <MenuItem value="Traveler">Traveler</MenuItem> */}
           </Select>
         </FormControl>
 

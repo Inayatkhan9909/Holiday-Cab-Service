@@ -19,6 +19,7 @@ const Search = () => {
   const [pickupError, setPickupError] = useState(false);
   const [dropError, setDropError] = useState(false);
   const [tripTypeError, setTripTypeError] = useState(false);
+  const [sameLocationError, setSameLocationError] = useState(false);
   const router = useRouter();
 
   const handleSubmit = (event) => {
@@ -27,6 +28,7 @@ const Search = () => {
     setPickupError(false);
     setDropError(false);
     setTripTypeError(false);
+    setSameLocationError(false);
 
     let valid = true;
     if (!pickup) {
@@ -39,6 +41,10 @@ const Search = () => {
     }
     if (!tripType) {
       setTripTypeError(true);
+      valid = false;
+    }
+    if (pickup && drop && pickup === drop) {
+      setSameLocationError(true);
       valid = false;
     }
 
@@ -64,7 +70,7 @@ const Search = () => {
     >
       <Grid container spacing={1} sx={{width:{sm:'60%',sx:'95%'}, justifyContent: 'center', alignItems: 'center' }}>
         <Grid item  sm={5} lg={4} xs={5}>
-          <FormControl fullWidth  error={pickupError}>
+          <FormControl fullWidth  error={pickupError || sameLocationError}>
             <InputLabel id="pickup_select">Pickup</InputLabel>
             <Select
               labelId="pickup_select"
@@ -78,14 +84,15 @@ const Search = () => {
               <MenuItem value="Pahlagam">Pahlagam</MenuItem>
               <MenuItem value="Gulmarg">Gulmarg</MenuItem>
               <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-              <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-              <MenuItem value="Kargil">Kargil</MenuItem>
+              {/* <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem> */}
             </Select>
             {pickupError && <FormHelperText>Pickup location is required.</FormHelperText>}
+            {sameLocationError && <FormHelperText>Pickup and drop locations cannot be the same.</FormHelperText>}
           </FormControl>
         </Grid>
         <Grid item sm={5} lg={4} xs={6}>
-          <FormControl fullWidth error={dropError}>
+          <FormControl fullWidth error={dropError || sameLocationError}>
             <InputLabel id="drop_select">Drop</InputLabel>
             <Select
               labelId="drop_select"
@@ -99,10 +106,11 @@ const Search = () => {
               <MenuItem value="Pahlagam">Pahlagam</MenuItem>
               <MenuItem value="Gulmarg">Gulmarg</MenuItem>
               <MenuItem value="Sonamarg">Sonamarg</MenuItem>
-              <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
-              <MenuItem value="Kargil">Kargil</MenuItem>
+              {/* <MenuItem value="Doodhpathri">Doodhpathri</MenuItem>
+              <MenuItem value="Kargil">Kargil</MenuItem> */}
             </Select>
             {dropError && <FormHelperText>Drop location is required.</FormHelperText>}
+            {sameLocationError && <FormHelperText>Pickup and drop locations cannot be the same.</FormHelperText>}
           </FormControl>
         </Grid>
         <Grid item sm={5} lg={4} xs={5}>

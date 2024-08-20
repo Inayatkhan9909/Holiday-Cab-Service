@@ -94,7 +94,7 @@ const PackageDetails = ({ params }) => {
         ...prevData,
         packagename: data.packagename || "",
         price: data.price || "",
-        packageduration:data.packageduration || "",
+        packageduration: data.packageduration || "",
       }));
     } catch (error) {
       console.error("Error fetching package details:", error);
@@ -115,11 +115,28 @@ const PackageDetails = ({ params }) => {
 
   const validateForm = () => {
     const newErrors = {};
+    const currentDateTime = new Date();
+    const pickupDateTime = new Date(`${formData.pickupdate}T${formData.pickuptime}`);
+
+    // Check for empty fields
     Object.keys(formData).forEach((key) => {
       if (!formData[key]) {
         newErrors[key] = "This field is required";
       }
     });
+
+    // Validate contact number
+    if (formData.contact && !/^\d{10}$/.test(formData.contact)) {
+      newErrors.contact = "Contact number must be exactly 10 digits";
+    }
+
+    // Validate pickup date and time
+    if (pickupDateTime < currentDateTime) {
+      newErrors.pickupdate = "Pickup date and time cannot be in the past";
+    } else if ((pickupDateTime - currentDateTime) / (1000 * 60 * 60) < 10) {
+      newErrors.pickupdate = "Pickup date and time must be at least 10 hours from now";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -127,7 +144,7 @@ const PackageDetails = ({ params }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log(formData)
+      console.log(formData);
       setconfirmbookDialoge(true);
     }
   };

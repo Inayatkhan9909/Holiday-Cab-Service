@@ -230,8 +230,8 @@ const BookCab = () => {
                   <option value="Pahlagam">Pahlagam</option>
                   <option value="Gulmarg">Gulmarg</option>
                   <option value="Sonamarg">Sonamarg</option>
-                  <option value="Doodhpathri">Doodhpathri</option>
-                  <option value="Kargil">Kargil</option>
+                  {/* <option value="Doodhpathri">Doodhpathri</option>
+                  <option value="Kargil">Kargil</option> */}
                 </select>
                 {errors.pickup && (
                   <p className="mt-2 text-sm text-red-600">{errors.pickup}</p>
@@ -257,8 +257,8 @@ const BookCab = () => {
                   <option value="Pahlagam">Pahlagam</option>
                   <option value="Gulmarg">Gulmarg</option>
                   <option value="Sonamarg">Sonamarg</option>
-                  <option value="Doodhpathri">Doodhpathri</option>
-                  <option value="Kargil">Kargil</option>
+                  {/* <option value="Doodhpathri">Doodhpathri</option>
+                  <option value="Kargil">Kargil</option> */}
                 </select>
                 {errors.drop && (
                   <p className="mt-2 text-sm text-red-600">{errors.drop}</p>
@@ -312,10 +312,10 @@ const BookCab = () => {
                 >
                   <option value="">Select Cab Type</option>
                   <option value="Swift dzire">Swift dzire</option>
-                  <option value="Honda Amaze">Honda Amaze</option>
+                  {/* <option value="Honda Amaze">Honda Amaze</option> */}
                   <option value="Crysta">Crysta</option>
                   <option value="Innova">Innova</option>
-                  <option value="Traveler">Traveler</option>
+                  {/* <option value="Traveler">Traveler</option> */}
                 </select>
                 {errors.cabtype && (
                   <p className="mt-2 text-sm text-red-600">{errors.cabtype}</p>

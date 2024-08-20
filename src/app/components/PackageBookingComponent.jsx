@@ -7,38 +7,40 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
+import CircularProgress from '@mui/material/CircularProgress'; 
+import { redirect } from 'next/navigation'
 
 const PackageBookingComponent = ({ formData }) => {
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
   const handleBookandContactoffice = async () => {
     setLoading(true);
     try {
-      try {
-        console.log("dd "+formData)
+
         const response = await fetch('/api/cab/packages/BookPackage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
         })
-        
+
         const responseData = await response.json();
-        
+
         if (response.ok) {
-      
-          setResponseMessage(responseData.message);
+
+          setSuccess(true);
+          setTimeout(() => {
+              redirect('/allpackages');
+          }, 2000); 
         } else {
-            console.error('Server responded with:', response.status, responseData);
-            setResponseMessage(response.message);
+          
+          console.error('Server responded with:', response.status, responseData);
+          setResponseMessage(response.message);
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error in sending booking confirmation. Please try again.');
-    }
-      
+     
     } catch (error) {
       setResponseMessage("Failed to confirm booking. Please try again.");
     } finally {
@@ -55,6 +57,22 @@ const PackageBookingComponent = ({ formData }) => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+        <div className="flex justify-center items-center w-2/4 ">
+            <CircularProgress />
+        </div>
+    );
+}
+
+if (success) {
+    return (
+        <div className="flex justify-center items-center h-1/2">
+            <h2 className="text-2xl text-green-500 font-semibold">Booking confirmed and payment successful!</h2>
+        </div>
+    );
+}
 
   return (
     <>
@@ -85,11 +103,10 @@ const PackageBookingComponent = ({ formData }) => {
         </div>
         {responseMessage && (
           <div
-            className={`mt-4 p-2 text-center ${
-              responseMessage.includes("successfully")
+            className={`mt-4 p-2 text-center ${responseMessage.includes("successfully")
                 ? "text-green-600"
                 : "text-red-600"
-            }`}
+              }`}
           >
             {responseMessage}
           </div>
