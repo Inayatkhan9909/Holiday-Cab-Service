@@ -142,6 +142,10 @@ const BookCab = () => {
         newErrors[key] = "This field is required";
       }
     });
+    if (formData.pickup === formData.drop) {
+      newErrors.pickup = "Pickup and drop locations cannot be the same";
+      newErrors.drop = "Pickup and drop locations cannot be the same";
+    }
 
     if (!validatecontact(formData.contact)) {
       newErrors.contact = "Invalid contact number";
@@ -153,6 +157,7 @@ const BookCab = () => {
       newErrors.time =
         "Date and time must be in the future and at least 10 hours from now";
     }
+    
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
