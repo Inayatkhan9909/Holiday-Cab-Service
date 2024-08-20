@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -36,11 +36,24 @@ export default function SignUp() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const validateFields = () => {
+    const newErrors = {};
+    if (!firstname) newErrors.firstname = "First name is required";
+    if (!lastname) newErrors.lastname = "Last name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!phone) newErrors.phone = "Phone number is required";
+    if (phone && phone.length !== 10) newErrors.phone = "Phone number must be 10 digits";
+    if (!password) newErrors.password = "Password is required";
+    if (!acceptedTerms) newErrors.terms = "You must accept the privacy policy and terms & conditions";
+    return newErrors;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!acceptedTerms) {
-      setErrors({ terms: "You must accept the privacy policy and terms & conditions" });
+    const newErrors = validateFields();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     } else {
       setErrors({});
@@ -66,7 +79,7 @@ export default function SignUp() {
 
       const data = await response.json();
 
-      if (data.message ==="User Created Succesfully") {
+      if (data.message === "User Created Successfully") {
         toast.success("User Created Successfully");
         setFirstname("");
         setEmail("");
@@ -101,7 +114,7 @@ export default function SignUp() {
       return;
     }
     console.log("reason empty");
-    setLoadDialog(false)
+    setLoadDialog(false);
   };
 
   return (
@@ -149,6 +162,8 @@ export default function SignUp() {
                     }}
                     value={firstname}
                     onKeyDown={handleKeyDown}
+                    error={!!errors.firstname}
+                    helperText={errors.firstname}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -164,6 +179,8 @@ export default function SignUp() {
                     }}
                     value={lastname}
                     onKeyDown={handleKeyDown}
+                    error={!!errors.lastname}
+                    helperText={errors.lastname}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -179,6 +196,8 @@ export default function SignUp() {
                     }}
                     value={email}
                     onKeyDown={handleKeyDown}
+                    error={!!errors.email}
+                    helperText={errors.email}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -194,8 +213,21 @@ export default function SignUp() {
                     }}
                     value={phone}
                     onKeyDown={handleKeyDown}
-                    error={phone.length > 0 && phone.length !== 10}
-                    helperText={phone.length > 0 && phone.length !== 10 ? "Phone number must be 10 digits" : ""}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
+                    onBlur={() => {
+                      if (phone.length !== 10) {
+                        setErrors((prevErrors) => ({
+                          ...prevErrors,
+                          phone: "Phone number must be 10 digits",
+                        }));
+                      } else {
+                        setErrors((prevErrors) => {
+                          const { phone, ...rest } = prevErrors;
+                          return rest;
+                        });
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -212,6 +244,8 @@ export default function SignUp() {
                     }}
                     value={password}
                     onKeyDown={handleKeyDown}
+                    error={!!errors.password}
+                    helperText={errors.password}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

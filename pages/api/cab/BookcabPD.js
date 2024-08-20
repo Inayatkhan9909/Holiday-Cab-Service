@@ -15,7 +15,6 @@ const Bookcab = async (req, res) => {
         const { pickup, drop, triptype, email, traveldate,
             traveltime, cabtype, persons, customername, contact, pickupfulladdress } = req.body;
         const tripfair = req.body.price;
-
         if (!pickup || !drop || !triptype || !email || !traveldate || !traveltime ||
             !tripfair || !cabtype || !persons || !customername || !contact || !pickupfulladdress) {
             return errorHandler(res, 400, "All fields are required");

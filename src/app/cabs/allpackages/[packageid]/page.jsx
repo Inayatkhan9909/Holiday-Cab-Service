@@ -1,5 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchUser,
+  selectUser,
+  selectLoading as selectUserLoading,
+  selectError as selectUserError,
+} from "../../../features/user/userSlice";
 import {
   Button,
   Dialog,
@@ -7,34 +14,67 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import PackageBookingComponent from "@/app/components/PackageBookingComponent";
 
 const PackageDetails = ({ params }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const userLoading = useSelector(selectUserLoading);
+  const userError = useSelector(selectUserError);
+
   const [packageDetails, setPackageDetails] = useState({});
   const [confirmbookDialoge, setconfirmbookDialoge] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    packagename: "",
+    pickup: "",
+    customername: "",
     email: "",
-    contactNo: "",
-    pickupFullAddress: "",
-    date: "",
-    time: "",
-    cabType: "",
+    pickupfulladdress: "",
+    contact: "",
+    price: "",
+    persons: "",
+    pickuptime: "",
+    pickupdate: "",
+    cabtype: "", 
+    packageduration:"",
   });
   const [errors, setErrors] = useState({});
+
+  const cabPrices = {
+    "Swift dzire": 5000,
+    "Honda Amaze": 6000,
+    "Crysta": 8999,
+    "Innova": 8000,
+    "Traveler": 10999,
+  };
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
 
   useEffect(() => {
     fetchPackageDetails();
   }, [params.packageid]);
 
+  useEffect(() => {
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        customername: `${user.firstname} ${user.lastname}`,
+        email: user.email,
+        contact: user.contact,
+      }));
+    }
+  }, [user]);
+
   const fetchPackageDetails = async () => {
     try {
-      console.log(params.packageid);
       const queryString = decodeURIComponent(params.packageid);
       const packageId = queryString.split("=")[1];
-      console.log(packageId);
       const response = await fetch(
         `/api/cab/packages/GetPackagebyId?packageId=${packageId}`,
         {
@@ -50,7 +90,12 @@ const PackageDetails = ({ params }) => {
       }
       const data = await response.json();
       setPackageDetails(data);
-      console.log(data);
+      setFormData((prevData) => ({
+        ...prevData,
+        packagename: data.packagename || "",
+        price: data.price || "",
+        packageduration:data.packageduration || "",
+      }));
     } catch (error) {
       console.error("Error fetching package details:", error);
     }
@@ -59,6 +104,13 @@ const PackageDetails = ({ params }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "cabtype") {
+      setFormData((prevData) => ({
+        ...prevData,
+        price: cabPrices[value] || 0,
+      }));
+    }
   };
 
   const validateForm = () => {
@@ -75,7 +127,7 @@ const PackageDetails = ({ params }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form data submitted:", formData);
+      console.log(formData)
       setconfirmbookDialoge(true);
     }
   };
@@ -100,7 +152,7 @@ const PackageDetails = ({ params }) => {
         const address = data.results[0]?.formatted_address;
         setFormData((prevData) => ({
           ...prevData,
-          pickupFullAddress: address || "",
+          pickupfulladdress: address || "",
         }));
         if (!address) {
           alert("Unable to fetch address");
@@ -110,6 +162,22 @@ const PackageDetails = ({ params }) => {
       alert("Geolocation is not supported by this browser.");
     }
   };
+
+  if (userLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (userError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Typography color="error">Error: {userError}</Typography>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -135,9 +203,9 @@ const PackageDetails = ({ params }) => {
                 {packageDetails.packagename}
               </h3>
               <p className="mb-4">{packageDetails.description}</p>
-
+              <p className="mb-4">Duration: {packageDetails.packageduration}</p>
               <p className="text-lg font-semibold">
-                Price: ${packageDetails.price}
+                Price: Rs {formData.price}
               </p>
             </div>
           </div>
@@ -146,23 +214,24 @@ const PackageDetails = ({ params }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="form-control">
                 <label
-                  htmlFor="name"
+                  htmlFor="pickup"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name
+                  Pickup
                 </label>
                 <input
-                  id="name"
-                  name="name"
+                  id="pickup"
+                  name="pickup"
                   type="text"
-                  value={formData.name}
+                  value={formData.pickup || ""}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
-                {errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                {errors.pickup && (
+                  <p className="mt-2 text-sm text-red-600">{errors.pickup}</p>
                 )}
               </div>
+             
               <div className="form-control">
                 <label
                   htmlFor="email"
@@ -174,48 +243,28 @@ const PackageDetails = ({ params }) => {
                   id="email"
                   name="email"
                   type="email"
-                  value={formData.email}
+                  value={formData.email || ""}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  disabled
                 />
                 {errors.email && (
                   <p className="mt-2 text-sm text-red-600">{errors.email}</p>
                 )}
               </div>
-              <div className="form-control">
-                <label
-                  htmlFor="contactNo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Contact No
-                </label>
-                <input
-                  id="contactNo"
-                  name="contactNo"
-                  type="text"
-                  value={formData.contactNo}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-                {errors.contactNo && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.contactNo}
-                  </p>
-                )}
-              </div>
               <div className="form-control relative">
                 <label
-                  htmlFor="pickupFullAddress"
+                  htmlFor="pickupfulladdress"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Pickup Full Address
                 </label>
                 <div className="flex items-center">
                   <input
-                    id="pickupFullAddress"
-                    name="pickupFullAddress"
+                    id="pickupfulladdress"
+                    name="pickupfulladdress"
                     type="text"
-                    value={formData.pickupFullAddress}
+                    value={formData.pickupfulladdress || ""}
                     onChange={handleChange}
                     className="flex-grow mt-1 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   />
@@ -227,73 +276,119 @@ const PackageDetails = ({ params }) => {
                     <MyLocationIcon />
                   </IconButton>
                 </div>
-                {errors.pickupFullAddress && (
+                {errors.pickupfulladdress && (
                   <p className="mt-2 text-sm text-red-600">
-                    {errors.pickupFullAddress}
+                    {errors.pickupfulladdress}
                   </p>
                 )}
               </div>
               <div className="form-control">
                 <label
-                  htmlFor="date"
+                  htmlFor="contact"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Date
+                  Contact
                 </label>
                 <input
-                  id="date"
-                  name="date"
-                  type="date"
-                  value={formData.date}
+                  id="contact"
+                  name="contact"
+                  type="text"
+                  value={formData.contact || ""}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
-                {errors.date && (
-                  <p className="mt-2 text-sm text-red-600">{errors.date}</p>
+                {errors.contact && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.contact}
+                  </p>
                 )}
               </div>
               <div className="form-control">
                 <label
-                  htmlFor="time"
+                  htmlFor="persons"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Time
+                  Persons
+                </label>
+                <select
+                  id="persons"
+                  name="persons"
+                  value={formData.persons}
+                  onChange={handleChange}
+                  className="mt-1 block w-4/5 rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+                  <option value="">Select Number of Persons</option>
+                  {Array.from({ length: 15 }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1}
+                    </option>
+                  ))}
+                </select>
+                {errors.persons && (
+                  <p className="mt-2 text-sm text-red-600">{errors.persons}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="pickuptime"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Pickup Time
                 </label>
                 <input
-                  id="time"
-                  name="time"
+                  id="pickuptime"
+                  name="pickuptime"
                   type="time"
-                  value={formData.time}
+                  value={formData.pickuptime || ""}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
-                {errors.time && (
-                  <p className="mt-2 text-sm text-red-600">{errors.time}</p>
+                {errors.pickuptime && (
+                  <p className="mt-2 text-sm text-red-600">{errors.pickuptime}</p>
                 )}
               </div>
               <div className="form-control">
                 <label
-                  htmlFor="cabType"
+                  htmlFor="pickupdate"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Pickup Date
+                </label>
+                <input
+                  id="pickupdate"
+                  name="pickupdate"
+                  type="date"
+                  value={formData.pickupdate || ""}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errors.pickupdate && (
+                  <p className="mt-2 text-sm text-red-600">{errors.pickupdate}</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label
+                  htmlFor="cabtype"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Cab Type
                 </label>
                 <select
-                  id="cabType"
-                  name="cabType"
-                  value={formData.cabType}
+                  id="cabtype"
+                  name="cabtype"
+                  value={formData.cabtype || ""}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-2 p-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 >
                   <option value="">Select Cab Type</option>
-                  <option value="Swift dzire">Swift dzire</option>
-                  <option value="Honda Amaze">Honda Amaze</option>
-                  <option value="Crysta">Crysta</option>
-                  <option value="Innova">Innova</option>
-                  <option value="Traveler">Traveler</option>
+                  {Object.keys(cabPrices).map((cab) => (
+                    <option key={cab} value={cab}>
+                      {cab}
+                    </option>
+                  ))}
                 </select>
-                {errors.cabType && (
-                  <p className="mt-2 text-sm text-red-600">{errors.cabType}</p>
+                {errors.cabtype && (
+                  <p className="mt-2 text-sm text-red-600">{errors.cabtype}</p>
                 )}
               </div>
             </div>

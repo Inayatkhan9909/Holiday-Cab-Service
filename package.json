@@ -16,6 +16,7 @@
     "@mui/material": "^5.15.19",
     "@nextui-org/react": "^2.4.6",
     "@reduxjs/toolkit": "^2.2.6",
+    "axios": "^1.7.4",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.4.0",
     "cookie": "^0.6.0",

@@ -46,12 +46,12 @@ const BookPackageSchema = new mongoose.Schema({
         trim: true 
     },
     pickuptime: { 
-        type: Number, 
+        type: String, 
         required: [true, "Pickup time is required"], 
         trim: true 
     },
     pickupdate: { 
-        type: Number, 
+        type: Date, 
         required: [true, "Pickup date is required"], 
         trim: true 
     },
