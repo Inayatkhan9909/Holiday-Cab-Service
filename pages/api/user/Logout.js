@@ -6,7 +6,7 @@ import errorHandler from "../../../utils/Features";
 async function Logout(req, res) {
 
     try {
-        if (req.method !== "GET") {
+        if (req.method !== "POST") {
             return errorHandler(res, 400, "Only POST Method is allowed");
         }
           
@@ -15,7 +15,7 @@ async function Logout(req, res) {
             cookie.serialize("token", "", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV !== "development",
-                maxAge: 60 * 60 * 24, 
+                maxAge: 0, 
                 sameSite: "strict",
                 path:'/'
                

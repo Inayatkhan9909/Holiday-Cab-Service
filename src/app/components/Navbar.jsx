@@ -61,7 +61,7 @@ function ResponsiveAppBar() {
   const handleLogout = async () => {
     try {
       const response = await fetch("/api/user/Logout", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
