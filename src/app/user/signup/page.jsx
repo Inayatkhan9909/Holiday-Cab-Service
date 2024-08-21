@@ -79,8 +79,8 @@ export default function SignUp() {
 
       const data = await response.json();
 
-      if (data.message === "User Created Successfully") {
-        toast.success("User Created Successfully");
+      if (data.message === "User Created Succesfully") {
+        toast.success(data.message);
         setFirstname("");
         setEmail("");
         setPhone("");
