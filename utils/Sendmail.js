@@ -1,19 +1,19 @@
 import nodemailer from 'nodemailer';
 import axios from 'axios';
 
-const validateEmail = async (email) => {
-  const apiKey = process.env.ZEROBOUNCE_API_KEY;
-  const response = await axios.get(`https://api.zerobounce.net/v2/validate?api_key=${apiKey}&email=${email}`);
-  return response.data.status === 'valid';
-};
+// const validateEmail = async (email) => {
+//   const apiKey = process.env.ZEROBOUNCE_API_KEY;
+//   const response = await axios.get(`https://api.zerobounce.net/v2/validate?api_key=${apiKey}&email=${email}`);
+//   return response.data.status === 'valid';
+// };
 
 const sendEmail = async (to, subject, html) => {
   try {
-    const isValid = await validateEmail(to);
-    if (!isValid) {
-      console.error('Invalid email address:', to);
-      return false;
-    }
+    // const isValid = await validateEmail(to);
+    // if (!isValid) {
+    //   console.error('Invalid email address:', to);
+    //   return false;
+    // }
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
